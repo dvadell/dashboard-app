@@ -13,6 +13,7 @@ class PanelItem extends Component {
         if (this.state.editing) {
             // We were editing and now we pressed the upload icon -> save
             console.log('Saving content of ', this.props.name, ':', this.state.content)
+            this.props.doSave(this.state.content)
         }
         this.setState({ editing: !this.state.editing})
     }
