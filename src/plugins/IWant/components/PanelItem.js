@@ -1,4 +1,7 @@
 import React, {Component} from 'react'
+import dompurify from 'dompurify'
+import { wtToHtml } from '../../../wikiText';
+
 
 class PanelItem extends Component {
     constructor(props) {
@@ -18,16 +21,16 @@ class PanelItem extends Component {
         this.setState({ editing: !this.state.editing})
     }
 
-    updateContent = event => this.setState({content: event.target.value});
+    updateContent = event => {console.log(event.target.value); this.setState({content: event.target.value})};
     toggleOpen = () => this.state.editing ? this.setState({open: true}) : this.setState({ open: !this.state.open})
 
     render() {
         let name = this.props.name;
         return (
-            <div id="{name}">
+            <div id={name}>
                 <span id="pros-icon" onClick={this.toggleEdit} className={"fa " + (this.state.editing ? "fa-upload" : "fa-edit")}></span>
             {
-                    ! this.state.editing ? ( this.state.content ) : (
+                    ! this.state.editing ?  <div dangerouslySetInnerHTML={{__html: dompurify.sanitize(wtToHtml(this.state.content))}} /> : (
                                 <textarea   name="{name}" placeholder="Write!" value={this.state.content} 
                                             className="form-control mousetrap markup" rows="20"
                                             onChange={this.updateContent}></textarea>

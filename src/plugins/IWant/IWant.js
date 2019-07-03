@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Mousetrap from 'mousetrap'
 import PanelItem from './components/PanelItem'
 import './IWant.css';
 import Accordeon from './components/Accordeon/Accordeon'
@@ -17,7 +18,18 @@ class IWant extends Component {
 
     doSave(name) { return (content) => {
             console.log('doSave', name, content)
+            this.setState({ [name]: content })
         }   
+    }
+
+    componentDidMount() {
+        console.log(this.state)
+
+        Mousetrap.bind(["ctrl+s", "meta+s"], e => {
+            e.preventDefault ? e.preventDefault() : e.returnValue = false;
+            console.log('Ctrl+S2!')
+            console.log(this.state)
+        });
     }
 
     render() {
