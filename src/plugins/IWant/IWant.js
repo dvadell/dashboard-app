@@ -1,9 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import Mousetrap from 'mousetrap'
 import PanelItem from './components/PanelItem'
 import './IWant.css';
 import Accordeon from './components/Accordeon/Accordeon'
 import AccordeonItem from './components/Accordeon/AccordeonItem'
+
+let title = '2019-06-30'
+const API_URL='http://localhost:3000/api/v1/'
 
 
 class IWant extends Component {
@@ -12,8 +15,16 @@ class IWant extends Component {
         this.state = {
             pros: '',
             cons: '',
-            whatFor: ''
+            whatFor: '',
+            description: ''
         }
+    }
+
+    myRefs = {
+        pros: createRef(),
+        cons: createRef(),
+        whatFor: createRef(),
+        description: createRef()
     }
 
     doSave(name) { return (content) => {
@@ -23,13 +34,35 @@ class IWant extends Component {
     }
 
     componentDidMount() {
-        console.log(this.state)
-
         Mousetrap.bind(["ctrl+s", "meta+s"], e => {
             e.preventDefault ? e.preventDefault() : e.returnValue = false;
-            console.log('Ctrl+S2!')
-            console.log(this.state)
+
+            // Get all the state, everywhere
+            let newState = {}
+            Object.keys(this.myRefs).map( panelName => {
+                newState[panelName] = this.myRefs[panelName].current.state.content
+            })
+            this.setState({...newState})
+
+            if (this.state.description === undefined) return false;  // Just a safeguard
+            fetch(API_URL + 'quieros/' + title, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', },
+                body: JSON.stringify({
+                    cons: this.state.cons,
+                    pros: this.state.pros,
+                    description: this.state.description,
+                    title: this.state.title,
+                    whatFor: this.state.whatFor
+                })
+            })
+            .then(res => console.log(res))
         });
+
+        fetch(API_URL + 'quieros/' + title)
+            .then(res => res.json())
+            .then( json => { console.log('new data:') ;  this.setState({...json})})
+            .catch( err => this.setState({err}))
     }
 
     render() {
@@ -38,18 +71,25 @@ class IWant extends Component {
             <div className="row bg-light flex-fill d-flex justify-content-start">
 
                 <div className="col-md-9 col-xs-12">
-                        <PanelItem name="content" doSave={this.doSave('content')}/>
+                        <PanelItem name="description" 
+                            ref={this.myRefs.description}
+                            doSave={this.doSave('description')}
+                            content={this.state.description}
+                        />
                 </div>
                 <div className="col-md-3 col-xs-12">
                     <Accordeon>
                         <AccordeonItem title="What for?">
-                            <PanelItem name="whatFor" doSave={this.doSave('whatFor')}/>
+                            <PanelItem name="whatFor" ref={this.myRefs.whatFor}
+                                content={this.state.whatFor} doSave={this.doSave('whatFor')}/>
                         </AccordeonItem>
                         <AccordeonItem title="Pros">
-                            <PanelItem name="pros" doSave={this.doSave('pros')}/>
+                            <PanelItem name="pros" ref={this.myRefs.pros}
+                                content={this.state.pros} doSave={this.doSave('pros')}/>
                         </AccordeonItem>
                         <AccordeonItem title="Cons">
-                            <PanelItem name="cons" doSave={this.doSave('cons')}/>
+                            <PanelItem name="cons" ref={this.myRefs.cons} 
+                                content={this.state.cons} doSave={this.doSave('cons')}/>
                         </AccordeonItem>
                     </Accordeon>
                 </div>

@@ -21,6 +21,10 @@ class PanelItem extends Component {
         this.setState({ editing: !this.state.editing})
     }
 
+    componentWillReceiveProps(newProps) {
+        this.setState({content: newProps.content, editing: false})
+    }
+
     updateContent = event => {console.log(event.target.value); this.setState({content: event.target.value})};
     toggleOpen = () => this.state.editing ? this.setState({open: true}) : this.setState({ open: !this.state.open})
 

@@ -1,12 +1,12 @@
 function externalLinks(wikiText) {
   const externalLinksRE = /\[ *(.*?)( +.*?)?\ *\]/g;
   let lines = "";
+  if (!wikiText) return;
 
   wikiText.split("\n").forEach(thisLine => {
     let matches = [];
     while ((matches = externalLinksRE.exec(thisLine))) {
-      console.log(matches);
-      let isURLRE = /^http[s]?:\/\//;
+        let isURLRE = /^http[s]?:\/\//;
 
       if ( ! isURLRE.test(matches[1]) ) { continue; } 
         
@@ -25,6 +25,7 @@ function externalLinks(wikiText) {
 function localLinks(wikiText) {
   const localLinksRE = /\[\[ *(.*?)(\|.*?)?\ *\]\]/g;
   let lines = "";
+  if (!wikiText) return;
 
   wikiText.split("\n").forEach(thisLine => {
     let matches = [];
@@ -52,6 +53,7 @@ function lineByLine(wikiText) {
   const pendingTaskRE    = /^\[ \] (.*)/;
   const checkedTaskRE    = /^\[x\] (.*)/;
   const waitingTaskRE    = /^\[w\] (.*)/;
+  if (!wikiText) return;
 
   let lines = "";
   wikiText.split("\n").forEach(element => {
@@ -71,6 +73,7 @@ function bullets(wikiText) {
   const bulletsRE = /^(\*+) (.*)/; /* matches "* ", "** ", "*** ", etc */
   let lines = "";
   let lastLevel = 0;
+  if (!wikiText) return;
 
   wikiText.split("\n").forEach(element => {
     let matches = bulletsRE.exec(element);
@@ -110,6 +113,7 @@ function quote(wikiText) {
   const quotesRE = /^ (.*)/; /* matches " XXXXXX" */
   let lines = "";
   let blockquoteLast = 0;
+  if (!wikiText) return;
 
   wikiText.split("\n").forEach(element => {
     let matches = quotesRE.exec(element);
@@ -143,6 +147,7 @@ function wholeBody(wikiText) {
   let pRE = /\n *\n/g;
   let boldRE = /\'\'\'(.*?)\'\'\'/g;
   let italicsRE = /\'\'(.*?)\'\'/g;
+  if (!wikiText) return;
   return wikiText
     .replace(pRE, "<p>\n")
     .replace(boldRE, "<strong>$1</strong>")
