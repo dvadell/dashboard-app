@@ -1,7 +1,7 @@
 import React, { Component, createRef } from 'react'
 import Mousetrap from 'mousetrap'
 import PanelItem from '../../components/PanelItem/PanelItem'
-import './IWant.css';
+import './Project.css';
 import Accordeon from '../../components/Accordeon/Accordeon'
 import AccordeonItem from '../../components/Accordeon/AccordeonItem'
 
@@ -75,7 +75,20 @@ class IWant extends Component {
             <div id="content" className="container-fluid d-flex h-100 flex-column">
             <div className="row bg-light flex-fill d-flex justify-content-start">
 
-                <div className="col-md-9 col-xs-12">
+            <div className="col-md-3 col-xs-12">
+                    <Accordeon>
+                        <AccordeonItem title="What do I need?">
+                            <PanelItem name="whatFor" ref={this.myRefs.whatFor}
+                                content={this.state.whatFor} doSave={this.doSave('whatFor')}/>
+                        </AccordeonItem>
+                        <AccordeonItem title="Next Steps">
+                            <PanelItem name="pros" ref={this.myRefs.pros}
+                                content={this.state.pros} doSave={this.doSave('pros')}/>
+                        </AccordeonItem>
+                    </Accordeon>
+                </div>
+
+                <div className="col-md-6 col-xs-12">
                     <h2>{this.state.title}</h2>
                         <PanelItem name="description" 
                             ref={this.myRefs.description}

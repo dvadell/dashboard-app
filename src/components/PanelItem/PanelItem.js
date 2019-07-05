@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import dompurify from 'dompurify'
-import { wtToHtml } from '../../../wikiText';
+import { wtToHtml } from '../../wikiText';
 
 
 class PanelItem extends Component {
