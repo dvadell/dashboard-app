@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { LanguageReducer } from './reducers';
 import './index.css';
 import App from './App';
+import IWant from './plugins/IWant/IWant';
 import NavBar from './components/NavBar/NavBar'
 import * as serviceWorker from './serviceWorker';
 
@@ -19,7 +20,8 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <NavBar />
-            <Route path="/" exact   component={App} />
+            <Route path="/" exact    component={App} />
+            <Route path="/iw/:title?" component={IWant} />
         </Router>
     </Provider>,
     document.getElementById('root'));

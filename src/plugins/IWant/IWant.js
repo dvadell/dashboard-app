@@ -5,19 +5,20 @@ import './IWant.css';
 import Accordeon from './components/Accordeon/Accordeon'
 import AccordeonItem from './components/Accordeon/AccordeonItem'
 
-let title = '2019-06-30'
-const API_URL='http://localhost:3000/api/v1/'
+const API_URL='http://localhost:9000/api/v1/'
 
 
 class IWant extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            title: this.props.match.params.title || 'Página Principal',
             pros: '',
             cons: '',
             whatFor: '',
             description: ''
         }
+        console.log('constructed! title is', this.state.title)
     }
 
     myRefs = {
@@ -34,6 +35,9 @@ class IWant extends Component {
     }
 
     componentDidMount() {
+        console.log('mounted! title is', this.state.title)
+        let title = this.state.title;
+
         Mousetrap.bind(["ctrl+s", "meta+s"], e => {
             e.preventDefault ? e.preventDefault() : e.returnValue = false;
 
@@ -66,11 +70,13 @@ class IWant extends Component {
     }
 
     render() {
+        console.log('rendering! title is', this.state.title)
         return ( 
             <div id="content" className="container-fluid d-flex h-100 flex-column">
             <div className="row bg-light flex-fill d-flex justify-content-start">
 
                 <div className="col-md-9 col-xs-12">
+                    <h2>{this.state.title}</h2>
                         <PanelItem name="description" 
                             ref={this.myRefs.description}
                             doSave={this.doSave('description')}
