@@ -6,17 +6,23 @@ function externalLinks(wikiText) {
   wikiText.split("\n").forEach(thisLine => {
     let matches = [];
     while ((matches = externalLinksRE.exec(thisLine))) {
-        let isURLRE = /^http[s]?:\/\//;
+      let isURLRE = /^http[s]?:\/\//;
 
-      if ( ! isURLRE.test(matches[1]) ) { continue; } 
-        
+      if (!isURLRE.test(matches[1])) {
+        continue;
+      }
+
       /* There are two posible cases:
       [http://lwn.net] and [http://lwn.net This is LWN] */
       let link = matches[1];
-      let linkName = typeof matches[2] === 'string' ? matches[2].replace(/^ +/, "") : link;
+      let linkName =
+        typeof matches[2] === "string" ? matches[2].replace(/^ +/, "") : link;
 
-      thisLine = thisLine.replace(matches[0],'<a class="external" href="' + link + '">' + linkName + "</a>");
-    } 
+      thisLine = thisLine.replace(
+        matches[0],
+        '<a class="external" href="' + link + '">' + linkName + "</a>"
+      );
+    }
     lines = lines + "\n" + thisLine;
   });
   return lines;
@@ -30,15 +36,17 @@ function localLinks(wikiText) {
   wikiText.split("\n").forEach(thisLine => {
     let matches = [];
     while ((matches = localLinksRE.exec(thisLine))) {
-      console.log(matches);
-      
       /* There are two posible cases:
       [[Main Page]] and [[Main Page|Welcome to the home page]] */
       let link = matches[1];
-      let linkName = typeof matches[2] === 'string' ? matches[2].replace(/^\|/, "") : link;
+      let linkName =
+        typeof matches[2] === "string" ? matches[2].replace(/^\|/, "") : link;
 
-      thisLine = thisLine.replace(matches[0],'<a class="internal" href="' + link + '">' + linkName + "</a>");
-    } 
+      thisLine = thisLine.replace(
+        matches[0],
+        '<a class="internal" href="' + link + '">' + linkName + "</a>"
+      );
+    }
     lines = lines + "\n" + thisLine;
   });
   return lines;
@@ -50,21 +58,28 @@ function lineByLine(wikiText) {
   const header3RE = /==== *(.*) *====/;
   const header4RE = /===== *(.*) *=====/;
   const strikenRE = /~~ *(.*?) *~~/g;
-  const pendingTaskRE    = /^\[ \] (.*)/;
-  const checkedTaskRE    = /^\[x\] (.*)/;
-  const waitingTaskRE    = /^\[w\] (.*)/;
+  const pendingTaskRE = /^\[ \] (.*)/;
+  const checkedTaskRE = /^\[x\] (.*)/;
+  const waitingTaskRE = /^\[w\] (.*)/;
   if (!wikiText) return;
 
   let lines = "";
   wikiText.split("\n").forEach(element => {
-    lines = lines + "\n" + element.replace(header4RE, "<h5>$1</h5>")
-                                  .replace(header3RE, "<h4>$1</h4>")
-                                  .replace(header2RE, "<h3>$1</h3>")
-                                  .replace(header1RE, "<h2>$1</h2>")
-                                  .replace(waitingTaskRE, '<br><span class="todo-waiting">$1</span>')
-                                  .replace(pendingTaskRE, '<br><span class="todo-pending">$1</span>')
-                                  .replace(checkedTaskRE, '<br><span class="todo-checked"><strike>$1</strike></span>')
-                                  .replace(strikenRE, "<strike>$1</strike>");
+    lines =
+      lines +
+      "\n" +
+      element
+        .replace(header4RE, "<h5>$1</h5>")
+        .replace(header3RE, "<h4>$1</h4>")
+        .replace(header2RE, "<h3>$1</h3>")
+        .replace(header1RE, "<h2>$1</h2>")
+        .replace(waitingTaskRE, '<br><span class="todo-waiting">$1</span>')
+        .replace(pendingTaskRE, '<br><span class="todo-pending">$1</span>')
+        .replace(
+          checkedTaskRE,
+          '<br><span class="todo-checked"><strike>$1</strike></span>'
+        )
+        .replace(strikenRE, "<strike>$1</strike>");
   });
   return lines;
 }
@@ -124,7 +139,7 @@ function quote(wikiText) {
       /* We are in a blockquote */
       if (blockquoteLast === 0) {
         /* And it's a new blockquote */
-        thisLine = '<blockquote>\n';
+        thisLine = "<blockquote>\n";
       }
       blockquoteLast = 1;
       thisLine = thisLine + matches[1];
@@ -156,8 +171,7 @@ function wholeBody(wikiText) {
 
 export function wtToHtml(wikiText) {
   const html = bullets(
-                lineByLine(
-                  externalLinks(localLinks(wholeBody(quote(wikiText))))
-                ));
-  return html
+    lineByLine(externalLinks(localLinks(wholeBody(quote(wikiText)))))
+  );
+  return html;
 }
