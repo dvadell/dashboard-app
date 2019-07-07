@@ -7,46 +7,51 @@ import "./NavBar.css";
 
 const Localize = Localizer(translations);
 
-const linkStyle = {
-  color: "white",
-  display: "block",
-  textAlign: "center",
-  padding: "14px 12px",
-  textDecoration: "none"
-};
+// const linkStyle = {
+//   color: "white",
+//   display: "block",
+//   textAlign: "center",
+//   padding: "14px 12px",
+//   textDecoration: "none"
+// };
 
-const divStyle = {
-  width: "100%",
-  background: "#333"
-};
+// const divStyle = {
+//   width: "100%",
+//   background: "#333"
+// };
 
-const ulStyle = {
-  listStyleType: "none",
-  padding: 0,
-  marginTop: "6px"
-};
+// const ulStyle = {
+//   listStyleType: "none",
+//   padding: 0,
+//   marginTop: "6px"
+// };
 
 function NavBar() {
   return (
-    <div style={{ display: "flex" }} id="gatosnavbar">
+    <div class="navbarwithburger">
       <SideBar pageWrapId={"page-wrap"} outerContainerId={"app"} />
+      <div className="non-bootstrap-navbar" id="page-wrap">
+        {/* 
+        <Link to="/">
+          <Localize>I Want</Localize>
+        </Link> */}
 
-      <div style={divStyle} id="page-wrap">
-        <ul style={ulStyle}>
-          <li style={{ float: "left" }}>
-            <Link style={linkStyle} to="/">
-              <Localize>I Want</Localize>
-            </Link>
-          </li>
+        <div className="textarea-div">
+          <textarea
+            placeholder="Tell me something..."
+            aria-label="Tell me something..."
+          ></textarea>
+        </div>
+
+        <div>
           <Link to="random">
             <img
               src="/img/dado_rojo_chico.png"
-              style={{ float: "right", height: "3em" }}
+              style={{ height: "3em" }}
               alt="Random!"
-              id="logo"
             ></img>
           </Link>
-        </ul>
+        </div>
       </div>
     </div>
   );
