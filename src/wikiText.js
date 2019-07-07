@@ -52,6 +52,19 @@ function localLinks(wikiText) {
   return lines;
 }
 
+// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#Specifying_a_function_as_a_parameter
+const taskReplace = taskStatus => (dummy, task) => {
+  let iconClass = "fa-square";
+  if (taskStatus === "done") {
+    iconClass = "fa-check-square";
+  }
+  if (taskStatus === "waiting") {
+    iconClass = "fa-spinner";
+  }
+
+  return `<br><span class="fa ` + iconClass + `"></span> ` + task;
+};
+
 function lineByLine(wikiText) {
   const header1RE = /== *(.*) *==/;
   const header2RE = /=== *(.*) *===/;
@@ -73,12 +86,9 @@ function lineByLine(wikiText) {
         .replace(header3RE, "<h4>$1</h4>")
         .replace(header2RE, "<h3>$1</h3>")
         .replace(header1RE, "<h2>$1</h2>")
-        .replace(waitingTaskRE, '<br><span class="todo-waiting">$1</span>')
-        .replace(pendingTaskRE, '<br><span class="todo-pending">$1</span>')
-        .replace(
-          checkedTaskRE,
-          '<br><span class="todo-checked"><strike>$1</strike></span>'
-        )
+        .replace(waitingTaskRE, taskReplace("waiting"))
+        .replace(pendingTaskRE, taskReplace("pending"))
+        .replace(checkedTaskRE, taskReplace("done"))
         .replace(strikenRE, "<strike>$1</strike>");
   });
   return lines;

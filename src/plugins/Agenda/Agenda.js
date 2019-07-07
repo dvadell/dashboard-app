@@ -47,6 +47,7 @@ class IWant extends Component {
   };
 
   loadEverything = title => {
+    console.log("Loading Everything about", title);
     fetch(API_URL + "quieros/" + title)
       .then(res => res.json())
       .then(json => {
@@ -77,6 +78,13 @@ class IWant extends Component {
       })
     });
   };
+
+  componentWillReceiveProps(newProps, oldProps) {
+    console.log("Will receive new props", { newProps, oldProps });
+    if (this.state.title !== newProps.match.params.title) {
+      this.loadEverything(newProps.match.params.title);
+    }
+  }
 
   componentDidMount() {
     console.log("mounted! title is", this.state.title);
