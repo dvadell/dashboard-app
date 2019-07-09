@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import LinkWithRedux from "../../components/LinkWithRedux";
 
 // Quoted lines are those that start with 4 spaces.
@@ -22,8 +22,10 @@ const splitQuoteTagEnding = wikiText => {
   return [quoted, rest];
 };
 
+// These are the rules that turn wikiText to a tree
 export const rules = {
   internalLink: ["[[", () => console.log("matched!"), "]]"],
+  externalLink: ["[http", undefined, "]"],
   bold: ["'''", () => console.log("matched bold"), "'''"],
   italics: ["''", () => console.log("matched italics"), "''"],
   quoted: ["\n    ", () => console.log("matched quoted"), splitQuoteTagEnding],
@@ -34,7 +36,9 @@ export const rules = {
   header2: ["=== ", undefined, " ==="],
   header3: ["==== ", undefined, " ===="],
   header4: ["===== ", undefined, " ====="],
-  bullet: ["* ", undefined, "\n"]
+  bullet: ["* ", undefined, "\n"],
+  p: ["\n\n", undefined, wikiText => ["dummy", wikiText]],
+  hr: ["----", undefined, wikiText => ["dummy", wikiText]]
 };
 
 // string.split() with a limit is not good enough
@@ -132,6 +136,7 @@ export const wikiParseToTree = (wikiText, rules) => {
   return tree.concat(moreTags);
 };
 
+// This will turn the tree to a number of react components
 export const treeToReact = tree => {
   const tagToReact = {
     internalLink: content => {
@@ -140,27 +145,33 @@ export const treeToReact = tree => {
         <LinkWithRedux to={linkName}>{linkText || linkName}</LinkWithRedux>
       );
     },
+    externalLink: content => {
+      let [linkName, linkText] = splitInTwo(treeToReact(content).join(), " ");
+      const prettyLinkName = linkName.slice(linkName.indexOf("://") + 3);
+      return (
+        <a href={"http" + linkName} alt={prettyLinkName}>
+          {linkText || prettyLinkName}
+        </a>
+      );
+    },
     text: content => content,
     bold: content => <span className="bold">{treeToReact(content)}</span>,
     italics: content => <span className="italics">{treeToReact(content)}</span>,
     quoted: content => <div className="quoted">{treeToReact(content)}</div>,
     taskUnchecked: content => (
-      <span>
-        <br />
+      <div>
         <span className="fa fa-square"></span> {treeToReact(content)}
-      </span>
+      </div>
     ),
     taskChecked: content => (
-      <span>
-        <br />
+      <div>
         <span className="fa fa-check-square"></span> {treeToReact(content)}
-      </span>
+      </div>
     ),
     taskWaiting: content => (
-      <span>
-        <br />
+      <div>
         <span className="fa fa-spinner"></span> {treeToReact(content)}
-      </span>
+      </div>
     ),
     header1: content => <h1>{treeToReact(content)}</h1>,
     header2: content => <h2>{treeToReact(content)}</h2>,
@@ -170,7 +181,9 @@ export const treeToReact = tree => {
       <ul>
         <li>{treeToReact(content)}</li>
       </ul>
-    )
+    ),
+    p: content => <p></p>,
+    hr: content => <hr />
   };
   return tree.map(tag => {
     if (tag.type) {
@@ -184,9 +197,9 @@ export const treeToReact = tree => {
 export const wikiParser = (wikiText, rules) => {
   if (!wikiText) return "";
   const tree = wikiParseToTree(wikiText, rules);
-  // console.log({tree})
+  console.log({ tree });
   const reactFromTree = treeToReact(tree);
-  // console.log({reactFromTree})
+  console.log({ reactFromTree });
   return reactFromTree;
 };
 

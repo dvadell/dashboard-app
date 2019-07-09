@@ -51,11 +51,6 @@ class PanelItem extends Component {
         {!this.state.editing ? (
           wikiParser(this.state.content)
         ) : (
-          // <div
-          //   dangerouslySetInnerHTML={{
-          //     __html: dompurify.sanitize(wtToHtml(this.state.content))
-          //   }}
-          // />
           <textarea
             name="{name}"
             placeholder="Write!"

@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
-import wikiParse, {
+import {
   rules,
   splitInTwo,
   findFirstStopWordPos,
@@ -139,29 +139,6 @@ describe("build the tree of tags", () => {
     expect(typeof tree[1].type).toEqual("function");
     expect(tree[2]).toEqual(" el artículo");
   });
-
-  // let wikiTextComplex = " lots of quotes '''[[a link]]''' no link again"
-  // it('from complex wikiText', () => {
-  //     let tree = wikiParser(wikiTextComplex, rules)
-  //     expect(tree[0]).toEqual({
-  //         type: "text", done: true, content: ' lots of quotes '
-  //     })
-  //     expect(tree[1]).toEqual({
-  //         type: 'bold', done: false, content: '[[a link]]'
-  //     })
-  //     expect(tree[2]).toEqual({
-  //         type: "text", done: false, content: ' no link again'
-  //     })
-  // })
-
-  // let wikiTextOnly = 'no link no no link again'
-  // it('expect to separate just text', () => {
-  //     let tree = wikiParser(wikiTextOnly, rules)
-  //     expect(tree[0]).toEqual({
-  //         type: "text", done: true, content: 'no link no no link again'
-  //     })
-  //     expect(tree.length).toBe(1)
-  // })
 });
 
 //
@@ -173,9 +150,20 @@ describe("parse quoted", () => {
     this too
 and not this`;
   it("from simple wikiText", () => {
-    let tree = wikiParse(wikiTextSimple, rules);
+    let tree = wikiParser(wikiTextSimple, rules);
     let expected = <div className="quoted">this should be quoted this too</div>;
     expect(tree[1]).toEqual(expected);
+  });
+});
+
+describe("parse P", () => {
+  let wikiTextSimple = `A line
+
+and another`;
+  it("from simple wikiText", () => {
+    let tree = wikiParser(wikiTextSimple, rules);
+    let expected = <div className="quoted">this should be quoted this too</div>;
+    expect(tree).toEqual(expected);
   });
 });
 
@@ -186,13 +174,15 @@ describe("Tasks", () => {
 [x] Was the dishes
 [w] Wait for the bus
 Great!`;
+
   it("All kind of tasks - simple", () => {
-    let tree = wikiParse(wikiTextWithTasks, rules);
+    let tree = wikiParser(wikiTextWithTasks, rules);
     let expected = "";
     expect(tree[0]).toEqual("Tasks for today:\n");
-    expect(tree[1]).toEqual(
-      <div className="task-unchecked">Do the laundry</div>
-    );
+    // expect(tree[1]).toEqual(
+    //   <div className="task-unchecked">Do the laundry</div>
+    // );
+    expect(tree[2]).toEqual("Great!");
   });
 });
 
