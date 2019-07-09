@@ -1,60 +1,50 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import SideBar from "../../components/SideBar/SideBar";
+import { getPageAction } from "../../actions";
 import Localizer from "../../components/Localizer/Localizer";
 import translations from "./NavBar.translations";
 import "./NavBar.css";
 
 const Localize = Localizer(translations);
 
-// const linkStyle = {
-//   color: "white",
-//   display: "block",
-//   textAlign: "center",
-//   padding: "14px 12px",
-//   textDecoration: "none"
-// };
+const mapDispatchToProps = dispatch => {
+  return {
+    getPage: title => dispatch(getPageAction(title))
+  };
+};
 
-// const divStyle = {
-//   width: "100%",
-//   background: "#333"
-// };
+function NavBar({ getPage }) {
+  const goToRandom = () => {
+    getPage("random");
+    window.history.pushState({}, "random", "random");
+  };
 
-// const ulStyle = {
-//   listStyleType: "none",
-//   padding: 0,
-//   marginTop: "6px"
-// };
-
-function NavBar() {
   return (
-    <div class="navbarwithburger">
+    <div className="navbarwithburger non-bootstrap-navbar">
       <SideBar pageWrapId={"page-wrap"} outerContainerId={"app"} />
-      <div className="non-bootstrap-navbar" id="page-wrap">
-        {/* 
-        <Link to="/">
-          <Localize>I Want</Localize>
-        </Link> */}
+      <div id="page-wrap"></div>
 
-        <div className="textarea-div">
-          <textarea
-            placeholder="Tell me something..."
-            aria-label="Tell me something..."
-          ></textarea>
-        </div>
+      <div className="textarea-div">
+        <textarea
+          placeholder="Tell me something..."
+          aria-label="Tell me something..."
+        ></textarea>
+      </div>
 
-        <div>
-          <Link to="random">
-            <img
-              src="/img/dado_rojo_chico.png"
-              style={{ height: "3em" }}
-              alt="Random!"
-            ></img>
-          </Link>
-        </div>
+      <div>
+        <img
+          src="/img/dado_rojo_chico.png"
+          style={{ height: "3em" }}
+          alt="Random!"
+          onClick={goToRandom}
+        ></img>
       </div>
     </div>
   );
 }
 
-export default NavBar;
+export default connect(
+  null,
+  mapDispatchToProps
+)(NavBar);

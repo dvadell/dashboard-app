@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import dompurify from "dompurify";
-import { wtToHtml } from "../../wikiText";
+import { wikiParser } from "../../plugins/Agenda/WikiText";
 import "./PanelItem.css";
 
 class PanelItem extends Component {
@@ -50,12 +49,13 @@ class PanelItem extends Component {
           }
         ></span>
         {!this.state.editing ? (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: dompurify.sanitize(wtToHtml(this.state.content))
-            }}
-          />
+          wikiParser(this.state.content)
         ) : (
+          // <div
+          //   dangerouslySetInnerHTML={{
+          //     __html: dompurify.sanitize(wtToHtml(this.state.content))
+          //   }}
+          // />
           <textarea
             name="{name}"
             placeholder="Write!"

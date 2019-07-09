@@ -1,25 +1,35 @@
 import React, { Component, createRef } from "react";
+import { connect } from "react-redux";
 import Mousetrap from "mousetrap";
 import PanelItem from "../../components/PanelItem/PanelItem";
 import "./Agenda.css";
 import Accordeon from "../../components/Accordeon/Accordeon";
 import AccordeonItem from "../../components/Accordeon/AccordeonItem";
 import Calendar from "react-calendar";
+import { getPageAction, savePageAction } from "../../actions";
 
 const API_URL = "http://localhost:9000/api/v1/";
 
-class IWant extends Component {
+const mapStateToProps = state => {
+  return {
+    page: state.PagesReducer
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getPage: title => dispatch(getPageAction(title)),
+    savePage: title => dispatch(savePageAction(title))
+  };
+};
+
+class Agenda extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: this.props.match.params.title || "Página Principal",
-      pros: "",
-      cons: "",
-      whatFor: "",
-      description: "",
       date: new Date()
     };
-    console.log("constructed! title is", this.state.title);
+    console.log("constructed! ", this.props.page);
   }
 
   myRefs = {
@@ -32,15 +42,15 @@ class IWant extends Component {
   doSave(name) {
     return content => {
       console.log("doSave", name, content);
-      this.setState({ [name]: content });
+      this.saveEverything(this.props.page.title);
     };
   }
 
-  onChangeCalendar = date => this.setState({ date });
+  // onChangeCalendar = date => this.setState({ date });
 
   onClickDay = date => {
     const formattedDate = date.toISOString().slice(0, 10);
-    this.saveEverything(this.state.title);
+    this.saveEverything(this.props.page.title);
     console.log(formattedDate);
     this.loadEverything(formattedDate);
     this.props.history.push("/ag/" + formattedDate);
@@ -48,56 +58,38 @@ class IWant extends Component {
 
   loadEverything = title => {
     console.log("Loading Everything about", title);
-    fetch(API_URL + "quieros/" + title)
-      .then(res => res.json())
-      .then(json => {
-        console.log("new data:");
-        this.setState({ ...json });
-      })
-      .catch(err => this.setState({ err }));
+    this.props.getPage(title);
   };
 
   saveEverything = title => {
     // Get all the state, everywhere
-    let newState = {};
+    let newState = { title };
     Object.keys(this.myRefs).map(panelName => {
       newState[panelName] = this.myRefs[panelName].current.state.content;
     });
-    this.setState({ ...newState });
+    this.props.savePage(newState);
 
-    if (this.state.description === undefined) return false; // Just a safeguard
+    if (newState.description === undefined) return false; // Just a safeguard
     fetch(API_URL + "quieros/" + title, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        cons: this.state.cons,
-        pros: this.state.pros,
-        description: this.state.description,
-        title: this.state.title,
-        whatFor: this.state.whatFor
-      })
+      body: JSON.stringify(newState)
     });
   };
 
-  componentWillReceiveProps(newProps, oldProps) {
-    console.log("Will receive new props", { newProps, oldProps });
-    if (this.state.title !== newProps.match.params.title) {
-      this.loadEverything(newProps.match.params.title);
-    }
-  }
-
   componentDidMount() {
-    console.log("mounted! title is", this.state.title);
+    console.log("mounted! props is", this.props.page);
+
     Mousetrap.bind(["ctrl+s", "meta+s"], e => {
       e.preventDefault ? e.preventDefault() : (e.returnValue = false);
-      this.saveEverything(this.state.title);
+      this.saveEverything(this.props.page.title);
     });
-    this.loadEverything(this.state.title);
+
+    this.loadEverything(this.props.match.params.title);
   }
 
   render() {
-    console.log("rendering! title is", this.state.title);
-    return (
+    return this.props.page ? (
       <div id="content" className="container-fluid d-flex h-100 flex-column">
         <div className="row bg-light flex-fill d-flex justify-content-start">
           <div className="col-md-3 col-xs-12">
@@ -109,12 +101,12 @@ class IWant extends Component {
           </div>
 
           <div className="col-md-6 col-xs-12">
-            <h2 style={{ textAlign: "center" }}>{this.state.title}</h2>
+            <h2 style={{ textAlign: "center" }}>{this.props.page.title}</h2>
             <PanelItem
               name="description"
               ref={this.myRefs.description}
               doSave={this.doSave("description")}
-              content={this.state.description}
+              content={this.props.page.description}
             />
           </div>
           <div className="col-md-3 col-xs-12">
@@ -123,7 +115,7 @@ class IWant extends Component {
                 <PanelItem
                   name="whatFor"
                   ref={this.myRefs.whatFor}
-                  content={this.state.whatFor}
+                  content={this.props.page.whatFor}
                   doSave={this.doSave("whatFor")}
                 />
               </AccordeonItem>
@@ -131,7 +123,7 @@ class IWant extends Component {
                 <PanelItem
                   name="pros"
                   ref={this.myRefs.pros}
-                  content={this.state.pros}
+                  content={this.props.page.pros}
                   doSave={this.doSave("pros")}
                 />
               </AccordeonItem>
@@ -139,7 +131,7 @@ class IWant extends Component {
                 <PanelItem
                   name="cons"
                   ref={this.myRefs.cons}
-                  content={this.state.cons}
+                  content={this.props.page.cons}
                   doSave={this.doSave("cons")}
                 />
               </AccordeonItem>
@@ -147,8 +139,13 @@ class IWant extends Component {
           </div>
         </div>
       </div>
+    ) : (
+      ""
     );
   }
 }
 
-export default IWant;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Agenda);

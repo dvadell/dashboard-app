@@ -5,7 +5,7 @@ import { createStore, applyMiddleware, combineReducers } from "redux";
 import { createLogger } from "redux-logger";
 import thunkMiddleware from "redux-thunk";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { LanguageReducer } from "./reducers";
+import { LanguageReducer, PagesReducer } from "./reducers";
 import "./index.css";
 import App from "./App";
 import IWant from "./plugins/IWant/IWant";
@@ -15,7 +15,7 @@ import NavBar from "./components/NavBar/NavBar";
 import * as serviceWorker from "./serviceWorker";
 
 const logger = createLogger();
-const rootReducer = combineReducers({ LanguageReducer });
+const rootReducer = combineReducers({ LanguageReducer, PagesReducer });
 const store = createStore(
   rootReducer,
   applyMiddleware(thunkMiddleware, logger)

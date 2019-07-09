@@ -13,10 +13,16 @@
   height: 3rem;
 }
 
+#page-wrap {
+  width: 48px;
+}
+
 .textarea-div {
   flex: 1;
   width: 70%;
   height: 2rem;
+  display: flex;
+  align-items: center;
 }
 
 .textarea-div > textarea {
@@ -24,6 +30,9 @@
   height: 2rem;
   resize: none;
   background-color: #333;
+  flex: 1;
+  margin-left: 20%;
+  margin-right: 20%;
 }
 
 .textarea-div > textarea:focus {
@@ -32,9 +41,9 @@
   z-index: 1000;
   position: absolute;
   top: 0;
-  left: 25%;
+  left: 1;
   width: 50%;
+  margin-top: 0.5rem;
   background-color: #f8f9fa;
   transition: height 0.5s, background-color 0.5s;
-  /* transition: width 2s; */
 }
