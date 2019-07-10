@@ -4,7 +4,12 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import { createLogger } from "redux-logger";
 import thunkMiddleware from "redux-thunk";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 import { LanguageReducer, PagesReducer } from "./reducers";
 import "./index.css";
 import App from "./App";
@@ -21,13 +26,22 @@ const store = createStore(
   applyMiddleware(thunkMiddleware, logger)
 );
 
+const today = new Date().toISOString().slice(0, 10);
+
 ReactDOM.render(
   <Provider store={store}>
     <Router>
       <NavBar />
       <Route path="/" exact component={App} />
       <Route path="/pr/:title?" component={Project} />
-      <Route path="/ag/:title?" component={Agenda} />
+      <Switch>
+        <Route
+          path="/ag/"
+          exact
+          render={() => <Redirect to={"/ag/" + today} />}
+        />
+        <Route path="/ag/:title?" component={Agenda} />
+      </Switch>
       <Route path="/search" exact component={SearchComponent} />
     </Router>
   </Provider>,
