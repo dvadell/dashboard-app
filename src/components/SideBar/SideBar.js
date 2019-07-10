@@ -1,9 +1,19 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { slide as Menu } from "react-burger-menu";
-import { Link } from "react-router-dom";
 import Localizer from "../../components/Localizer/Localizer";
 import translations from "./SideBar.translations";
 import "./SideBar.css";
+import { setViewAction } from "../../actions";
+import LinkWithRedux from "../../components/LinkWithRedux";
+
+const mapDispatchToProps = dispatchEvent => {
+  return {
+    setView: viewHandler => dispatchEvent(setViewAction(viewHandler))
+  };
+};
+
+const today = new Date().toISOString().slice(0, 10);
 
 class SideBar extends Component {
   constructor(props) {
@@ -33,9 +43,13 @@ class SideBar extends Component {
 
   createItem = (text, link) => {
     return (
-      <Link onClick={() => this.closeMenu()} className="menu-item" to={link}>
+      <LinkWithRedux
+        onClick={() => this.closeMenu()}
+        className="menu-item"
+        to={link}
+      >
         {text}
-      </Link>
+      </LinkWithRedux>
     );
   };
 
@@ -48,13 +62,36 @@ class SideBar extends Component {
         isOpen={this.state.menuOpen}
         onStateChange={state => this.handleStateChange(state)}
       >
+        <small>View as...</small>
+        <button
+          onClick={() => {
+            this.props.setView("pr");
+            this.closeMenu();
+          }}
+        >
+          As Project
+        </button>
+        <button
+          onClick={() => {
+            this.props.setView("ag");
+            this.closeMenu();
+          }}
+        >
+          As Agenda
+        </button>
+
+        <hr></hr>
         {this.createItem(<Localize>Search</Localize>, "/search")}
         {this.createItem(<Localize>Projects</Localize>, "/pr/")}
-        {this.createItem(<Localize>Agenda</Localize>, "/ag/")}
+        {this.createItem(<Localize>Agenda</Localize>, "/ag/" + today)}
         {this.createItem(<Localize>Settings</Localize>, "/settings")}
+        <hr />
       </Menu>
     );
   }
 }
 
-export default SideBar;
+export default connect(
+  null,
+  mapDispatchToProps
+)(SideBar);

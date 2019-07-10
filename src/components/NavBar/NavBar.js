@@ -2,11 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import SideBar from "../../components/SideBar/SideBar";
 import { getPageAction } from "../../actions";
-import Localizer from "../../components/Localizer/Localizer";
-import translations from "./NavBar.translations";
+// import Localizer from "../../components/Localizer/Localizer";
+// import translations from "./NavBar.translations";
 import "./NavBar.css";
 
-const Localize = Localizer(translations);
+// const Localize = Localizer(translations);
 
 const mapDispatchToProps = dispatch => {
   return {

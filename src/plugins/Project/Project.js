@@ -1,6 +1,5 @@
-import React, { Component, createRef } from "react";
+import React from "react";
 import "./Project.css";
-import editable from "../../components/editable/editable";
 import Accordeon from "../../components/Accordeon/Accordeon";
 import AccordeonItem from "../../components/Accordeon/AccordeonItem";
 import PanelItem from "../../components/PanelItem/PanelItem";
@@ -15,18 +14,18 @@ const Project = props => {
           <Accordeon>
             <AccordeonItem title="What do I need?">
               <PanelItem
-                name="whatFor"
-                ref={props.myRefs.whatFor}
-                content={props.page.whatFor}
-                doSave={doSave("whatFor")}
+                name="whatDoINeed"
+                ref={props.myRefs.whatDoINeed}
+                content={props.page.whatDoINeed}
+                doSave={doSave("whatDoINeed")}
               />
             </AccordeonItem>
             <AccordeonItem title="Next Steps">
               <PanelItem
-                name="pros"
-                ref={props.myRefs.pros}
-                content={props.page.pros}
-                doSave={doSave("pros")}
+                name="nextSteps"
+                ref={props.myRefs.nextSteps}
+                content={props.page.nextSteps}
+                doSave={doSave("nextSteps")}
               />
             </AccordeonItem>
           </Accordeon>
@@ -74,4 +73,5 @@ const Project = props => {
   );
 };
 
-export default editable(Project);
+// export default editable(Project);
+export default Project;

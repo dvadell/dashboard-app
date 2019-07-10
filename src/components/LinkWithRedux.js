@@ -13,12 +13,12 @@ const LinkWithRedux = props => {
     props.getPage(to);
   };
   return (
-    <a
+    <button
       style={{ color: "#A9A6FF", cursor: "pointer" }}
       onClick={() => onClickHandler(props.to)}
     >
       {props.children}
-    </a>
+    </button>
   );
 };
 

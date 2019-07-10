@@ -5,9 +5,15 @@ import {
   GET_PAGE_FAILURE,
   SAVE_PAGE_PENDING,
   SAVE_PAGE_SUCCESS,
-  SAVE_PAGE_FAILURE
+  // SAVE_PAGE_FAILURE,
+  SET_VIEW
 } from "./constants";
 const API_URL = "http://localhost:9000/api/v1/";
+
+export const setViewAction = viewHandler => ({
+  type: SET_VIEW,
+  payload: viewHandler
+});
 
 export const setLanguageAction = lang => ({
   type: SET_LANGUAGE,

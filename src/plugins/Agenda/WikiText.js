@@ -70,7 +70,7 @@ export const splitInTwo = (string, sep, keepSep = false) => {
 
 //  Given wikiText abc[[aab'''bcc
 //  will return the rule that matched '[[' and the position (4)
-export const findFirstStopWordPos = (wikiText, rules) => {
+export const findFirstStopWord = (wikiText, rules) => {
   let order = Object.keys(rules).map(rule => {
     return [rule, wikiText.indexOf(rules[rule][0])];
   });
@@ -94,14 +94,14 @@ export const findFirstStopWordPos = (wikiText, rules) => {
 
   if (firstPosition[1] === -1) {
     // No matches
-    return ["text", -1];
+    return "text";
   }
-  return firstPosition;
+  return firstPosition[0];
 };
 
 export const separateTag = (wikiText, rule) => {
   // The next stopWord is at...
-  let [matchingRule, nextStopWordAt] = findFirstStopWordPos(wikiText, rules);
+  let matchingRule = findFirstStopWord(wikiText, rules);
 
   // We have just text
   if (matchingRule === "text") {

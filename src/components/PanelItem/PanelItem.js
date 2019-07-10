@@ -29,16 +29,22 @@ class PanelItem extends Component {
     this.setState({ content: newProps.content, editing: false });
   }
 
+  componentWillMount() {
+    this.setState({ content: this.props.content });
+  }
+
   updateContent = event => {
     console.log(event.target.value);
     this.setState({ content: event.target.value });
   };
+
   toggleOpen = () =>
     this.state.editing
       ? this.setState({ open: true })
       : this.setState({ open: !this.state.open });
 
   render() {
+    console.log("Agenda: rendering...");
     let name = this.props.name;
     return (
       <div id={name}>

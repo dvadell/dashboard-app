@@ -5,7 +5,8 @@ import {
   GET_PAGE_FAILURE,
   SAVE_PAGE_PENDING,
   SAVE_PAGE_SUCCESS,
-  SAVE_PAGE_FAILURE
+  SAVE_PAGE_FAILURE,
+  SET_VIEW
 } from "./constants";
 
 export const LanguageReducer = (state = { lang: "en" }, action = {}) => {
@@ -18,7 +19,8 @@ export const LanguageReducer = (state = { lang: "en" }, action = {}) => {
 };
 
 const initialState = {
-  title: ""
+  title: "",
+  viewHandler: "pr"
 };
 
 export const PagesReducer = (state = initialState, action = {}) => {
@@ -41,6 +43,8 @@ export const PagesReducer = (state = initialState, action = {}) => {
         error: action.payload,
         isPending: false
       });
+    case SET_VIEW:
+      return Object.assign({}, state, { viewHandler: action.payload });
     default:
       return state;
   }

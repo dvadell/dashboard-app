@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import editable from "../../components/editable/editable";
+import React from "react";
 import Accordeon from "../../components/Accordeon/Accordeon";
 import AccordeonItem from "../../components/Accordeon/AccordeonItem";
 import CalendarPanel from "./CalendarPanel";
@@ -7,6 +6,7 @@ import PanelItem from "../../components/PanelItem/PanelItem";
 
 const Agenda = React.forwardRef((props, myRefs) => {
   const doSave = name => content => props.doSave();
+  console.log("Agenda", props);
 
   return (
     <div id="content" className="container-fluid d-flex h-100 flex-column">
@@ -60,4 +60,5 @@ const Agenda = React.forwardRef((props, myRefs) => {
   );
 });
 
-export default editable(Agenda);
+// export default editable(Agenda);
+export default Agenda;

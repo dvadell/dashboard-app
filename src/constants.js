@@ -5,3 +5,5 @@ export const GET_PAGE_FAILURE = "GET_PAGE_FAILURE";
 export const SAVE_PAGE_PENDING = "SAVE_PAGE_PENDING";
 export const SAVE_PAGE_SUCCESS = "SAVE_PAGE_SUCCESS";
 export const SAVE_PAGE_FAILURE = "SAVE_PAGE_FAILURE";
+export const SET_VIEW = "SET_VIEW";
+export const GET_VIEW = "GET_VIEW";
