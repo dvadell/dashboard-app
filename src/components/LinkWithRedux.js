@@ -11,7 +11,6 @@ const mapDispatchToProps = dispatch => {
 const LinkWithRedux = props => {
   const onClickHandler = to => {
     props.getPage(to);
-    window.history.pushState({}, to, to);
   };
   return (
     <a

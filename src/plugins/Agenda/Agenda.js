@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { createRef } from "react";
 import { connect } from "react-redux";
 import Mousetrap from "mousetrap";
 import "./Agenda.css";
@@ -30,12 +30,7 @@ class Agenda extends Component {
     console.log("constructed! ", this.props.page);
   }
 
-  myRefs = {
-    pros: createRef(),
-    cons: createRef(),
-    whatFor: createRef(),
-    description: createRef()
-  };
+  myRefs = {};
 
   doSave(name) {
     return content => {
@@ -44,16 +39,6 @@ class Agenda extends Component {
     };
   }
 
-  // onChangeCalendar = date => this.setState({ date });
-
-  onClickDay = date => {
-    const formattedDate = date.toISOString().slice(0, 10);
-    this.saveEverything(this.props.page.title);
-    console.log(formattedDate);
-    this.loadEverything(formattedDate);
-    this.props.history.push("/ag/" + formattedDate);
-  };
-
   loadEverything = title => {
     console.log("Loading Everything about", title);
     this.props.getPage(title);
@@ -61,10 +46,13 @@ class Agenda extends Component {
 
   saveEverything = () => {
     // Get all the state, everywhere
-    let newState = { title: this.props.page.title };
-    Object.keys(this.myRefs).map(panelName => {
-      newState[panelName] = this.myRefs[panelName].current.state.content;
+    let newState = { ...this.props.page };
+    Object.keys(this.myRefs).forEach(panelName => {
+      if (this.myRefs[panelName].current) {
+        newState[panelName] = this.myRefs[panelName].current.state.content;
+      }
     });
+    console.log({ newState });
     this.props.savePage(newState);
     console.log("saving", newState);
 
@@ -88,16 +76,23 @@ class Agenda extends Component {
   }
 
   render() {
-    return this.props.page ? (
-      <AgendaView
-        myRefs={this.myRefs}
-        doSave={this.saveEverything}
-        onClickDay={this.onClickDay}
-        {...this.props}
-      />
-    ) : (
-      ""
-    );
+    if (this.props.page) {
+      Object.keys(this.props.page).forEach(
+        key => (this.myRefs[key] = createRef())
+      );
+      console.log(this.myRefs);
+      return (
+        <AgendaView
+          myRefs={this.myRefs}
+          doSave={this.saveEverything}
+          loadEverything={this.loadEverything}
+          onClickDay={this.onClickDay}
+          {...this.props}
+        />
+      );
+    } else {
+      return "";
+    }
   }
 }
 

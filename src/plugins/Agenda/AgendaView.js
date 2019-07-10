@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Accordeon from "../../components/Accordeon/Accordeon";
 import AccordeonItem from "../../components/Accordeon/AccordeonItem";
-import Calendar from "react-calendar";
+import CalendarPanel from "./CalendarPanel";
 import PanelItem from "../../components/PanelItem/PanelItem";
 
 const AgendaView = React.forwardRef((props, myRefs) => {
@@ -11,16 +11,10 @@ const AgendaView = React.forwardRef((props, myRefs) => {
     <div id="content" className="container-fluid d-flex h-100 flex-column">
       <div className="row bg-light flex-fill d-flex justify-content-start">
         <div className="col-md-3 col-xs-12">
-          <Calendar
-            //   value={this.state.date}
-            onClickDay={props.onClickDay}
+          <CalendarPanel
+            saveEverything={props.doSave}
+            loadEverything={props.loadEverything}
           />
-          <h4>Julio</h4>
-          <ul>
-            <li>20: día el amigo</li>
-            <li>22: mi cumpleaños</li>
-            <li>23: día del arquero</li>
-          </ul>
         </div>
 
         <div className="col-md-6 col-xs-12">

@@ -25,11 +25,11 @@ const splitQuoteTagEnding = wikiText => {
 
 // These are the rules that turn wikiText to a tree
 export const rules = {
-  internalLink: ["[[", () => console.log("matched!"), "]]"],
+  internalLink: ["[[", undefined, "]]"],
   externalLink: ["[http", undefined, "]"],
-  bold: ["'''", () => console.log("matched bold"), "'''"],
-  italics: ["''", () => console.log("matched italics"), "''"],
-  quoted: ["\n    ", () => console.log("matched quoted"), splitQuoteTagEnding],
+  bold: ["'''", undefined, "'''"],
+  italics: ["''", undefined, "''"],
+  quoted: ["\n    ", undefined, splitQuoteTagEnding],
   taskUnchecked: ["[ ] ", undefined, "\n"],
   taskChecked: ["[x] ", undefined, "\n"],
   taskWaiting: ["[w] ", undefined, "\n"],
@@ -198,9 +198,9 @@ export const treeToReact = tree => {
 export const wikiParser = (wikiText, rules) => {
   if (!wikiText) return "";
   const tree = wikiParseToTree(wikiText, rules);
-  console.log({ tree });
+  // console.log({ tree });
   const reactFromTree = treeToReact(tree);
-  console.log({ reactFromTree });
+  // console.log({ reactFromTree });
   return reactFromTree;
 };
 

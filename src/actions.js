@@ -33,6 +33,7 @@ export const getPageAction = title => dispatch => {
       }
     })
     .catch(error => dispatch({ type: GET_PAGE_FAILURE, payload: error }));
+  window.history.pushState({}, title, title);
 };
 
 export const savePageAction = page => dispatch => {
