@@ -7,6 +7,12 @@ import "./SideBar.css";
 import { setViewAction } from "../../actions";
 import LinkWithRedux from "../../components/LinkWithRedux";
 
+const mapStateToProps = state => {
+  return {
+    viewHandler: state.ViewReducer.viewHandler
+  };
+};
+
 const mapDispatchToProps = dispatchEvent => {
   return {
     setView: viewHandler => dispatchEvent(setViewAction(viewHandler))
@@ -41,7 +47,8 @@ class SideBar extends Component {
     this.setState(state => ({ menuOpen: !state.menuOpen }));
   }
 
-  createItem = (text, link) => {
+  createItem = (text, link, forcedViewHandler) => {
+    forcedViewHandler && this.props.setView(forcedViewHandler);
     return (
       <LinkWithRedux
         onClick={() => this.closeMenu()}
@@ -63,28 +70,35 @@ class SideBar extends Component {
         onStateChange={state => this.handleStateChange(state)}
       >
         <small>View as...</small>
-        <button
-          onClick={() => {
-            this.props.setView("pr");
-            this.closeMenu();
-          }}
-        >
-          As Project
-        </button>
-        <button
-          onClick={() => {
-            this.props.setView("ag");
-            this.closeMenu();
-          }}
-        >
-          As Agenda
-        </button>
+        {this.props.viewHandler === "ag" ? (
+          <button
+            onClick={() => {
+              this.props.setView("pr");
+              this.closeMenu();
+            }}
+          >
+            As Project
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              this.props.setView("ag");
+              this.closeMenu();
+            }}
+          >
+            As Agenda
+          </button>
+        )}
 
         <hr></hr>
-        {this.createItem(<Localize>Search</Localize>, "/search")}
-        {this.createItem(<Localize>Projects</Localize>, "/pr/")}
-        {this.createItem(<Localize>Agenda</Localize>, "/ag/" + today)}
+        {this.createItem(
+          <Localize>Project List</Localize>,
+          "Project List",
+          "pr"
+        )}
+        {this.createItem(<Localize>Today</Localize>, today)}
         {this.createItem(<Localize>Settings</Localize>, "/settings")}
+        {this.createItem(<Localize>Search</Localize>, "/search")}
         <hr />
       </Menu>
     );
@@ -92,6 +106,6 @@ class SideBar extends Component {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(SideBar);

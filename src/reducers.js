@@ -19,8 +19,7 @@ export const LanguageReducer = (state = { lang: "en" }, action = {}) => {
 };
 
 const initialState = {
-  title: "",
-  viewHandler: "pr"
+  title: ""
 };
 
 export const PagesReducer = (state = initialState, action = {}) => {
@@ -43,6 +42,13 @@ export const PagesReducer = (state = initialState, action = {}) => {
         error: action.payload,
         isPending: false
       });
+    default:
+      return state;
+  }
+};
+
+export const ViewReducer = (state = { viewHandler: "ag" }, action = {}) => {
+  switch (action.type) {
     case SET_VIEW:
       return Object.assign({}, state, { viewHandler: action.payload });
     default:

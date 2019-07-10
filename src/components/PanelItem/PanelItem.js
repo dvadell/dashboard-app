@@ -44,7 +44,6 @@ class PanelItem extends Component {
       : this.setState({ open: !this.state.open });
 
   render() {
-    console.log("Agenda: rendering...");
     let name = this.props.name;
     return (
       <div id={name}>

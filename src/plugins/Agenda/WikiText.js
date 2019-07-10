@@ -2,6 +2,8 @@ import React from "react";
 import LinkWithRedux from "../../components/LinkWithRedux";
 import "./WikiText.css";
 
+let randomKey = 0;
+
 // Quoted lines are those that start with 4 spaces.
 // We get a string of wikitext that starts quoted, and we have to divide it
 // until quoting ends (ie until we see a line that does not start with 4 spaces)
@@ -143,7 +145,9 @@ export const treeToReact = tree => {
     internalLink: content => {
       let [linkName, linkText] = splitInTwo(treeToReact(content).join(), "|");
       return (
-        <LinkWithRedux to={linkName}>{linkText || linkName}</LinkWithRedux>
+        <LinkWithRedux key={linkName} to={linkName}>
+          {linkText || linkName}
+        </LinkWithRedux>
       );
     },
     externalLink: content => {
@@ -160,30 +164,46 @@ export const treeToReact = tree => {
     italics: content => <span className="italics">{treeToReact(content)}</span>,
     quoted: content => <div className="quoted">{treeToReact(content)}</div>,
     taskUnchecked: content => (
-      <div>
+      <div key={randomKey++}>
         <span className="fa fa-square"></span> {treeToReact(content)}
       </div>
     ),
     taskChecked: content => (
-      <div>
+      <div key={randomKey++}>
         <span className="fa fa-check-square"></span> {treeToReact(content)}
       </div>
     ),
     taskWaiting: content => (
-      <div>
+      <div key={randomKey++}>
         <span className="fa fa-spinner"></span> {treeToReact(content)}
       </div>
     ),
-    header1: content => <h1>{treeToReact(content)}</h1>,
-    header2: content => <h2>{treeToReact(content)}</h2>,
-    header3: content => <h3>{treeToReact(content)}</h3>,
-    header4: content => <h4>{treeToReact(content)}</h4>,
+    header1: content => (
+      <h1 className="wiki" key={randomKey++}>
+        {treeToReact(content)}
+      </h1>
+    ),
+    header2: content => (
+      <h2 className="wiki" key={randomKey++}>
+        {treeToReact(content)}
+      </h2>
+    ),
+    header3: content => (
+      <h3 className="wiki" key={randomKey++}>
+        {treeToReact(content)}
+      </h3>
+    ),
+    header4: content => (
+      <h4 className="wiki" key={randomKey++}>
+        {treeToReact(content)}
+      </h4>
+    ),
     bullet: content => (
-      <ul>
+      <ul key={randomKey++}>
         <li>{treeToReact(content)}</li>
       </ul>
     ),
-    p: content => <p></p>,
+    p: content => <p key={randomKey++}></p>,
     hr: content => <hr />
   };
   return tree.map(tag => {

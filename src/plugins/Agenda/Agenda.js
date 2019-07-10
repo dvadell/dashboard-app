@@ -6,7 +6,6 @@ import PanelItem from "../../components/PanelItem/PanelItem";
 
 const Agenda = React.forwardRef((props, myRefs) => {
   const doSave = name => content => props.doSave();
-  console.log("Agenda", props);
 
   return (
     <div id="content" className="container-fluid d-flex h-100 flex-column">

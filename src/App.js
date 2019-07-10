@@ -11,7 +11,8 @@ const API_URL = "http://localhost:9000/api/v1/";
 
 const mapStateToProps = state => {
   return {
-    page: state.PagesReducer
+    page: state.PagesReducer,
+    viewHandler: state.ViewReducer.viewHandler
   };
 };
 
@@ -81,8 +82,7 @@ class App extends Component {
       Object.keys(this.props.page).forEach(
         key => (this.myRefs[key] = createRef())
       );
-      console.log(this.props.page);
-      if (this.props.page.viewHandler === "ag") {
+      if (this.props.viewHandler === "ag") {
         return (
           <Agenda
             myRefs={this.myRefs}

@@ -10,7 +10,8 @@ const mapDispatchToProps = dispatch => {
 
 const LinkWithRedux = props => {
   const onClickHandler = to => {
-    props.getPage(to);
+    props.onClick && props.onClick(); // <LinkWithRedux onClick=...
+    props.getPage(to); // <LinkWithRedux to=...
   };
   return (
     <button
