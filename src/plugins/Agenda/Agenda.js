@@ -59,5 +59,4 @@ const Agenda = React.forwardRef((props, myRefs) => {
   );
 });
 
-// export default editable(Agenda);
 export default Agenda;

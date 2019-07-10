@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { wikiParser } from "../../plugins/Agenda/WikiText";
+import { wikiParser } from "../WikiText/WikiText";
 import "./PanelItem.css";
 
 class PanelItem extends Component {

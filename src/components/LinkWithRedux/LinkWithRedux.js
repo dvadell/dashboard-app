@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { getPageAction } from "../actions";
+import { getPageAction } from "../../actions";
 
 const mapDispatchToProps = dispatch => {
   return {

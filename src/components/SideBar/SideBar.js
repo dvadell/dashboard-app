@@ -5,7 +5,7 @@ import Localizer from "../../components/Localizer/Localizer";
 import translations from "./SideBar.translations";
 import "./SideBar.css";
 import { setViewAction } from "../../actions";
-import LinkWithRedux from "../../components/LinkWithRedux";
+import LinkWithRedux from "../../components/LinkWithRedux/LinkWithRedux";
 
 const mapStateToProps = state => {
   return {
@@ -48,10 +48,12 @@ class SideBar extends Component {
   }
 
   createItem = (text, link, forcedViewHandler) => {
-    forcedViewHandler && this.props.setView(forcedViewHandler);
     return (
       <LinkWithRedux
-        onClick={() => this.closeMenu()}
+        onClick={() => {
+          this.closeMenu();
+          forcedViewHandler && this.props.setView(forcedViewHandler);
+        }}
         className="menu-item"
         to={link}
       >

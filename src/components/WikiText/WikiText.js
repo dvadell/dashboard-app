@@ -1,7 +1,8 @@
 import React from "react";
-import LinkWithRedux from "../../components/LinkWithRedux";
+import LinkWithRedux from "../LinkWithRedux/LinkWithRedux";
 import "./WikiText.css";
 
+// This is to put into the key attribute, or else React complains
 let randomKey = 0;
 
 // Quoted lines are those that start with 4 spaces.
