@@ -18,6 +18,11 @@ const translations = {
     es_ar: "Agenda",
     es_es: "Agenda",
     en: "Agenda"
+  },
+  Search: {
+    es_ar: "Buscar",
+    es_es: "Buscar",
+    en: "Search"
   }
 };
 

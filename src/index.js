@@ -13,6 +13,7 @@ import Project from "./plugins/Project/Project";
 import Agenda from "./plugins/Agenda/Agenda";
 import NavBar from "./components/NavBar/NavBar";
 import * as serviceWorker from "./serviceWorker";
+import SearchComponent from "./components/Search/Search";
 
 const logger = createLogger();
 const rootReducer = combineReducers({ LanguageReducer, PagesReducer });
@@ -29,6 +30,7 @@ ReactDOM.render(
       <Route path="/iw/:title?" component={IWant} />
       <Route path="/pr/:title?" component={Project} />
       <Route path="/ag/:title?" component={Agenda} />
+      <Route path="/search" exact component={SearchComponent} />
     </Router>
   </Provider>,
   document.getElementById("root")

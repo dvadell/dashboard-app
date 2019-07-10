@@ -48,6 +48,7 @@ class SideBar extends Component {
         isOpen={this.state.menuOpen}
         onStateChange={state => this.handleStateChange(state)}
       >
+        {this.createItem(<Localize>Search</Localize>, "/search")}
         {this.createItem(<Localize>I Want</Localize>, "/")}
         {this.createItem(<Localize>Projects</Localize>, "/pr/")}
         {this.createItem(<Localize>Agenda</Localize>, "/ag/")}

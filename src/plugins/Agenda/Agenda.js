@@ -98,6 +98,12 @@ class Agenda extends Component {
               value={this.state.date}
               onClickDay={this.onClickDay}
             />
+            <h4>Julio</h4>
+            <ul>
+              <li>20: día el amigo</li>
+              <li>22: mi cumpleaños</li>
+              <li>23: día del arquero</li>
+            </ul>
           </div>
 
           <div className="col-md-6 col-xs-12">

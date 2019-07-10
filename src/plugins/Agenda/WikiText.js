@@ -1,5 +1,6 @@
 import React from "react";
 import LinkWithRedux from "../../components/LinkWithRedux";
+import "./WikiText.css";
 
 // Quoted lines are those that start with 4 spaces.
 // We get a string of wikitext that starts quoted, and we have to divide it
