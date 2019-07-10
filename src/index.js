@@ -8,7 +8,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { LanguageReducer, PagesReducer } from "./reducers";
 import "./index.css";
 import App from "./App";
-import IWant from "./plugins/IWant/IWant";
 import Project from "./plugins/Project/Project";
 import Agenda from "./plugins/Agenda/Agenda";
 import NavBar from "./components/NavBar/NavBar";
@@ -27,7 +26,6 @@ ReactDOM.render(
     <Router>
       <NavBar />
       <Route path="/" exact component={App} />
-      <Route path="/iw/:title?" component={IWant} />
       <Route path="/pr/:title?" component={Project} />
       <Route path="/ag/:title?" component={Agenda} />
       <Route path="/search" exact component={SearchComponent} />

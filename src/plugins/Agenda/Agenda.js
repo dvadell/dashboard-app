@@ -1,102 +1,63 @@
-import React, { createRef } from "react";
-import { connect } from "react-redux";
-import Mousetrap from "mousetrap";
-import "./Agenda.css";
+import React, { Component } from "react";
+import editable from "../../components/editable/editable";
+import Accordeon from "../../components/Accordeon/Accordeon";
+import AccordeonItem from "../../components/Accordeon/AccordeonItem";
+import CalendarPanel from "./CalendarPanel";
+import PanelItem from "../../components/PanelItem/PanelItem";
 
-import { getPageAction, savePageAction } from "../../actions";
-import AgendaView from "./AgendaView";
+const Agenda = React.forwardRef((props, myRefs) => {
+  const doSave = name => content => props.doSave();
 
-const API_URL = "http://localhost:9000/api/v1/";
+  return (
+    <div id="content" className="container-fluid d-flex h-100 flex-column">
+      <div className="row bg-light flex-fill d-flex justify-content-start">
+        <div className="col-md-3 col-xs-12">
+          <CalendarPanel
+            saveEverything={props.doSave}
+            loadEverything={props.loadEverything}
+          />
+        </div>
 
-const mapStateToProps = state => {
-  return {
-    page: state.PagesReducer
-  };
-};
+        <div className="col-md-6 col-xs-12">
+          <h2 style={{ textAlign: "center" }}>{props.page.title}</h2>
+          <PanelItem
+            name="description"
+            ref={props.myRefs.description}
+            doSave={doSave("description")}
+            content={props.page.description}
+          />
+        </div>
+        <div className="col-md-3 col-xs-12">
+          <Accordeon>
+            <AccordeonItem title="What for?">
+              <PanelItem
+                name="whatFor"
+                ref={props.myRefs.whatFor}
+                content={props.page.whatFor}
+                doSave={doSave("whatFor")}
+              />
+            </AccordeonItem>
+            <AccordeonItem title="Pros">
+              <PanelItem
+                name="pros"
+                ref={props.myRefs.pros}
+                content={props.page.pros}
+                doSave={doSave("pros")}
+              />
+            </AccordeonItem>
+            <AccordeonItem title="Cons">
+              <PanelItem
+                name="cons"
+                ref={props.myRefs.cons}
+                content={props.page.cons}
+                doSave={doSave("cons")}
+              />
+            </AccordeonItem>
+          </Accordeon>
+        </div>
+      </div>
+    </div>
+  );
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    getPage: title => dispatch(getPageAction(title)),
-    savePage: title => dispatch(savePageAction(title))
-  };
-};
-
-class Agenda extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      date: new Date()
-    };
-    console.log("constructed! ", this.props.page);
-  }
-
-  myRefs = {};
-
-  doSave(name) {
-    return content => {
-      console.log("doSave", name, content);
-      this.saveEverything(this.props.page.title);
-    };
-  }
-
-  loadEverything = title => {
-    console.log("Loading Everything about", title);
-    this.props.getPage(title);
-  };
-
-  saveEverything = () => {
-    // Get all the state, everywhere
-    let newState = { ...this.props.page };
-    Object.keys(this.myRefs).forEach(panelName => {
-      if (this.myRefs[panelName].current) {
-        newState[panelName] = this.myRefs[panelName].current.state.content;
-      }
-    });
-    console.log({ newState });
-    this.props.savePage(newState);
-    console.log("saving", newState);
-
-    if (newState.description === undefined) return false; // Just a safeguard
-    fetch(API_URL + "quieros/" + this.props.page.title, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newState)
-    });
-  };
-
-  componentDidMount() {
-    console.log("mounted! props is", this.props.page);
-
-    Mousetrap.bind(["ctrl+s", "meta+s"], e => {
-      e.preventDefault ? e.preventDefault() : (e.returnValue = false);
-      this.saveEverything();
-    });
-
-    this.loadEverything(this.props.match.params.title);
-  }
-
-  render() {
-    if (this.props.page) {
-      Object.keys(this.props.page).forEach(
-        key => (this.myRefs[key] = createRef())
-      );
-      console.log(this.myRefs);
-      return (
-        <AgendaView
-          myRefs={this.myRefs}
-          doSave={this.saveEverything}
-          loadEverything={this.loadEverything}
-          onClickDay={this.onClickDay}
-          {...this.props}
-        />
-      );
-    } else {
-      return "";
-    }
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Agenda);
+export default editable(Agenda);

@@ -1,16 +1,9 @@
-import React from 'react';
-import {Redirect} from 'react-router-dom'
-import MainPage from './components/MainPage/MainPage'
-import './App.css';
+import React from "react";
+import { Redirect } from "react-router-dom";
+import "./App.css";
 
 function App() {
-  return (      
-      <Redirect to="/iw/" />
-    // <div className="App">
-    //   <Redirect to="/iw/" />
-    //     <MainPage/>
-    // </div> 
-  );
+  return <Redirect to="/ag/" />;
 }
 
 export default App;
