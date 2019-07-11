@@ -18,6 +18,11 @@ const translations = {
     es_ar: "Buscar",
     es_es: "Buscar",
     en: "Search"
+  },
+  "View as...": {
+    es_ar: "Ver como...",
+    es_es: "Ver como...",
+    en: "View as..."
   }
 };
 
