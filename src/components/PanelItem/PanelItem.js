@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { wikiParser } from "../WikiText/WikiText";
+import SmartTextarea from "./SmartTextarea";
 import "./PanelItem.css";
 
 class PanelItem extends Component {
@@ -33,9 +34,8 @@ class PanelItem extends Component {
     this.setState({ content: this.props.content });
   }
 
-  updateContent = event => {
-    console.log(event.target.value);
-    this.setState({ content: event.target.value });
+  updateContent = value => {
+    this.setState({ content: value });
   };
 
   toggleOpen = () =>
@@ -56,14 +56,11 @@ class PanelItem extends Component {
         {!this.state.editing ? (
           wikiParser(this.state.content)
         ) : (
-          <textarea
-            name="{name}"
-            placeholder="Write!"
-            value={this.state.content}
-            className="form-control mousetrap markup"
-            rows="20"
-            onChange={this.updateContent}
-          ></textarea>
+          <SmartTextarea
+            name={name}
+            content={this.state.content}
+            updateContent={this.updateContent}
+          />
         )}
       </div>
     );
