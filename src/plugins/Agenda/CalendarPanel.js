@@ -1,14 +1,21 @@
 import React from "react";
 import Calendar from "react-calendar";
 
-// onChangeCalendar = date => this.setState({ date });
-
+// This should:
+// * Get the upcomingEvents Page
+// * Pass the description to PaneItem (PI has it's own state)
+// * Create the doSave() function/method
+// * Don't mind about refs
 const CalendarPanel = props => {
   const onClickDay = date => {
     const formattedDate = date.toISOString().slice(0, 10);
     props.saveEverything();
     console.log(formattedDate);
     props.loadEverything(formattedDate);
+  };
+
+  const saveUpcomingEvents = () => {
+    console.log("saveUpcomingEvents");
   };
 
   return (
@@ -18,11 +25,12 @@ const CalendarPanel = props => {
         onClickDay={onClickDay}
       />
       <h4>Julio</h4>
-      <ul>
-        <li>20: día el amigo</li>
-        <li>22: mi cumpleaños</li>
-        <li>23: día del arquero</li>
-      </ul>
+      {/* <PanelItem
+                name="upcomingEvents"
+                ref={props.myRefs.cons}
+                content={props.page.cons}
+                doSave={saveUpcomingEvents}
+      /> */}
     </div>
   );
 };

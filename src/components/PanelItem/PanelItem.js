@@ -38,10 +38,10 @@ class PanelItem extends Component {
     this.setState({ content: value });
   };
 
-  toggleOpen = () =>
-    this.state.editing
-      ? this.setState({ open: true })
-      : this.setState({ open: !this.state.open });
+  // toggleOpen = () =>
+  //   this.state.editing
+  //     ? this.setState({ open: true })
+  //     : this.setState({ open: !this.state.open });
 
   render() {
     let name = this.props.name;

@@ -13,14 +13,15 @@ class SmartTextarea extends Component {
       caretPos: 0,
       left: 0,
       top: 0,
-      searchString: ""
+      searchString: "",
+      results: []
     };
-    this.popup = document.createElement("div");
+    // this.popup = document.createElement("div");
   }
 
-  componentDidMount() {
-    document.body.appendChild(this.popup);
-  }
+  //   componentDidMount() {
+  //     document.body.appendChild(this.popup);
+  //   }
 
   updateContent = e => {
     let value = e.target.value;
@@ -40,7 +41,11 @@ class SmartTextarea extends Component {
       this.props.content.slice(this.state.caretPos);
     console.log("New content should be:", newContent);
     this.props.updateContent(newContent);
-    this.setState({ popupOpen: false });
+    this.killPopup();
+  };
+
+  killPopup = () => {
+    this.setState({ popupOpen: false, searchString: "", results: [] });
   };
 
   updateCaretPos = e => {
@@ -77,6 +82,11 @@ class SmartTextarea extends Component {
         "key es",
         key
       );
+
+      if (key === "Escape") {
+        this.killPopup();
+      }
+
       if (key.length === 1) {
         newSearchString = this.state.searchString + key;
       }
