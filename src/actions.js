@@ -8,7 +8,7 @@ import {
   // SAVE_PAGE_FAILURE,
   SET_VIEW
 } from "./constants";
-const API_URL = "http://localhost:9000/api/v1/";
+import { loadPage, savePage } from "./fetchlib";
 
 export const setViewAction = viewHandler => ({
   type: SET_VIEW,
@@ -24,13 +24,7 @@ export const getPageAction = title => dispatch => {
   dispatch({
     type: GET_PAGE_PENDING
   });
-  fetch(API_URL + "quieros/" + title)
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      throw new Error(res.status + " " + res.statusText);
-    })
+  loadPage(title)
     .then(json => {
       if (json.error) {
         dispatch({ type: GET_PAGE_FAILURE, payload: json });
