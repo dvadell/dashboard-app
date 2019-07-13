@@ -3,6 +3,11 @@ import { wikiParser } from "../WikiText/WikiText";
 import SmartTextarea from "./SmartTextarea";
 import "./PanelItem.css";
 
+/**
+ * @param {string} content - The original content (that will later be changed in state.content)
+ * @param {function} doSave(string) - Function to run when saving the content.
+ * @param {string} name - A name
+ */
 class PanelItem extends Component {
   constructor(props) {
     super(props);

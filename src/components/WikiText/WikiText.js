@@ -16,7 +16,7 @@ const splitQuoteTagEnding = wikiText => {
   let line;
   while ((line = lines.shift())) {
     if (/^ {4}/.test(line)) {
-      quoted = quoted + "\n" + line.slice(3); // exclude the 4 spaces
+      quoted = quoted + "\n" + line.slice(4); // exclude the 4 spaces
     } else {
       rest = line;
       break;
@@ -42,7 +42,12 @@ export const rules = {
   header4: ["===== ", undefined, " ====="],
   bullet: ["* ", undefined, "\n"],
   p: ["\n\n", undefined, wikiText => ["dummy", wikiText]],
-  hr: ["----", undefined, wikiText => ["dummy", wikiText]]
+  hr: ["----", undefined, wikiText => ["dummy", wikiText]],
+  comment: [
+    "// Note: ",
+    undefined,
+    wikiText => splitInTwo(wikiText, "\n", true)
+  ]
 };
 
 // string.split() with a limit is not good enough
@@ -155,13 +160,17 @@ export const treeToReact = tree => {
       let [linkName, linkText] = splitInTwo(treeToReact(content).join(), " ");
       const prettyLinkName = linkName.slice(linkName.indexOf("://") + 3);
       return (
-        <a href={"http" + linkName} alt={prettyLinkName}>
+        <a key={randomKey++} href={"http" + linkName} alt={prettyLinkName}>
           {linkText || prettyLinkName}
         </a>
       );
     },
     text: content => content,
-    bold: content => <span className="bold">{treeToReact(content)}</span>,
+    bold: content => (
+      <span key={randomKey++} className="bold">
+        {treeToReact(content)}
+      </span>
+    ),
     italics: content => <span className="italics">{treeToReact(content)}</span>,
     quoted: content => <div className="quoted">{treeToReact(content)}</div>,
     taskUnchecked: content => (
@@ -199,13 +208,14 @@ export const treeToReact = tree => {
         {treeToReact(content)}
       </h4>
     ),
-    bullet: content => (
-      <ul key={randomKey++}>
-        <li>{treeToReact(content)}</li>
-      </ul>
-    ),
+    bullet: content => <div key={randomKey++}>• {treeToReact(content)}</div>,
     p: content => <p key={randomKey++}></p>,
-    hr: content => <hr />
+    hr: content => <hr key={randomKey++} />,
+    comment: content => (
+      <span key={randomKey++} className="comment italics">
+        {treeToReact(content)}
+      </span>
+    )
   };
   return tree.map(tag => {
     if (tag.type) {

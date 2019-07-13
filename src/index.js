@@ -27,7 +27,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <NavBar />
-      <Route path="/:view?/:title?" component={App} />
+      <Route path="/:title?" component={App} />
       <Route path="/search" exact component={SearchComponent} />
     </Router>
   </Provider>,

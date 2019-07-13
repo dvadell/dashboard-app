@@ -1,5 +1,6 @@
 import React from "react";
 import Calendar from "react-calendar";
+import EmbeddedPage from "../../components/EmbeddedPage/EmbeddedPage";
 
 // This should:
 // * Get the upcomingEvents Page
@@ -24,13 +25,7 @@ const CalendarPanel = props => {
         //   value={this.state.date}
         onClickDay={onClickDay}
       />
-      <h4>Julio</h4>
-      {/* <PanelItem
-                name="upcomingEvents"
-                ref={props.myRefs.cons}
-                content={props.page.cons}
-                doSave={saveUpcomingEvents}
-      /> */}
+      <EmbeddedPage title="upcomingEvents" member="description" />
     </div>
   );
 };

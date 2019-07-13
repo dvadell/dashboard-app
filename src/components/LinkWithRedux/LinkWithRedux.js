@@ -14,12 +14,18 @@ const LinkWithRedux = props => {
     props.getPage(to); // <LinkWithRedux to=...
   };
   return (
-    <button
-      style={{ color: "#A9A6FF", cursor: "pointer" }}
+    // <button
+    //   style={{ color: "#A9A6FF", cursor: "pointer", boxShadow: "0 0" }}
+    //   onClick={() => onClickHandler(props.to)}
+    // >
+    //   {props.children}
+    // </button>
+    <span
+      style={{ color: "#A9A6FF", cursor: "pointer", boxShadow: "0 0" }}
       onClick={() => onClickHandler(props.to)}
     >
       {props.children}
-    </button>
+    </span>
   );
 };
 

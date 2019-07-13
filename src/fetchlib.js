@@ -22,10 +22,11 @@ export const loadPage = (title, version = "current") => {
  * @returns {Promise} - with json as first argument
  */
 export const savePage = (title, json) => {
+  console.log(json);
   return fetch(API_URL + "quieros/" + title, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: json
+    body: JSON.stringify(json)
   }).then(res => {
     if (res.ok) {
       return res.json();
