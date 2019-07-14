@@ -5,6 +5,12 @@ import Popup from "./Popup";
 import ListOfResults from "./ListOfResults";
 const API_URL = "http://localhost:9000/api/v1/";
 
+/**
+ * @class SmartTextarea
+ * @param {string} contents - the initial (saved) content
+ * @param {function} updateContent - to update the content.
+ * @param {string} name - textarea's name
+ */
 class SmartTextarea extends Component {
   constructor(props) {
     super(props);
@@ -18,10 +24,6 @@ class SmartTextarea extends Component {
     };
     // this.popup = document.createElement("div");
   }
-
-  //   componentDidMount() {
-  //     document.body.appendChild(this.popup);
-  //   }
 
   updateContent = e => {
     let value = e.target.value;
@@ -130,9 +132,10 @@ class SmartTextarea extends Component {
           className="form-control mousetrap markup"
           rows="20"
           onChange={this.updateContent}
+          data-test="smart-textarea"
         ></textarea>
         {this.state.popupOpen ? (
-          <Popup left={this.state.left} top={this.state.top}>
+          <Popup left={this.state.left} top={this.state.top} data-test="popup">
             <ListOfResults
               results={this.state.results}
               autocomplete={this.autocomplete}
