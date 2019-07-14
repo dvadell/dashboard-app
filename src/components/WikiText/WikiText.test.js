@@ -140,7 +140,7 @@ describe("parse quoted", () => {
 and not this`;
   it("from simple wikiText", () => {
     let tree = wikiParser(wikiTextSimple, rules);
-    let expected = '<div class="quoted">this should be quoted\n this too</div>';
+    let expected = '<div class="quoted">this should be quoted\nthis too</div>';
     let wrapper = shallow(tree[1]);
     expect(wrapper.html()).toEqual(expected);
   });

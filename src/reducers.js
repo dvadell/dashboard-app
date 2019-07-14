@@ -9,7 +9,12 @@ import {
   SET_VIEW
 } from "./constants";
 
-export const LanguageReducer = (state = { lang: "en" }, action = {}) => {
+/**
+ * @function SettingsReducer
+ * @param {object} state - The old state
+ * @param {object} action  - The new language to set to
+ */
+export const SettingsReducer = (state = { lang: "en" }, action = {}) => {
   switch (action.type) {
     case SET_LANGUAGE:
       return Object.assign({}, state, { lang: action.payload });
