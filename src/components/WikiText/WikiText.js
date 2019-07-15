@@ -172,7 +172,11 @@ export const treeToReact = tree => {
       </span>
     ),
     italics: content => <span className="italics">{treeToReact(content)}</span>,
-    quoted: content => <div className="quoted">{treeToReact(content)}</div>,
+    quoted: content => (
+      <div key={randomKey++} className="quoted">
+        {treeToReact(content)}
+      </div>
+    ),
     taskUnchecked: content => (
       <div key={randomKey++}>
         <span className="fa fa-square"></span> {treeToReact(content)}

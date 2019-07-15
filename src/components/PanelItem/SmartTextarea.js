@@ -3,8 +3,7 @@ import caretXY from "caret-xy";
 import "./SmartTextarea.css";
 import Popup from "./Popup";
 import ListOfResults from "./ListOfResults";
-const API_URL = "http://localhost:9000/api/v1/";
-
+import { loadPage } from "../../fetchlib";
 /**
  * @class SmartTextarea
  * @param {string} contents - the initial (saved) content
@@ -22,7 +21,6 @@ class SmartTextarea extends Component {
       searchString: "",
       results: []
     };
-    // this.popup = document.createElement("div");
   }
 
   updateContent = e => {
@@ -30,7 +28,7 @@ class SmartTextarea extends Component {
     this.props.updateContent(value);
   };
 
-  autocomplete = choice => {
+  insertChoice = choice => {
     console.log("Chose", choice);
     let newContent = this.props.content.slice(
       0,
@@ -47,7 +45,12 @@ class SmartTextarea extends Component {
   };
 
   killPopup = () => {
-    this.setState({ popupOpen: false, searchString: "", results: [] });
+    this.setState({
+      popupOpen: false,
+      searchString: "",
+      results: [],
+      searchString: ""
+    });
   };
 
   updateCaretPos = e => {
@@ -68,6 +71,7 @@ class SmartTextarea extends Component {
           this.props.content[caretPos] === "\n"
         ) {
           let XY = caretXY(e.target);
+          console.log("Will open the popup at", XY);
           this.setState({
             popupOpen: true,
             left: XY.left,
@@ -77,23 +81,21 @@ class SmartTextarea extends Component {
       }
     }
     if (this.state.popupOpen) {
-      let newSearchString = "";
-      console.log(
-        "Antes: SearchString es",
-        this.state.searchString,
-        "key es",
-        key
-      );
+      let newSearchString = this.state.searchString;
 
       if (key === "Escape") {
+        newSearchString = "";
         this.killPopup();
       }
 
       if (key.length === 1) {
-        newSearchString = this.state.searchString + key;
+        newSearchString = newSearchString + key;
       }
       if (key === "Backspace") {
         newSearchString = this.state.searchString.slice(0, -1);
+        if (newSearchString < 2) {
+          this.killPopup();
+        }
       }
       console.log({ newSearchString });
 
@@ -108,14 +110,9 @@ class SmartTextarea extends Component {
   updatePopup = () => {
     console.log("Updating popup with", this.state.searchString);
     if (this.state.searchString && this.state.searchString.length > 1) {
-      fetch(API_URL + "quieros/search?q=" + this.state.searchString)
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw new Error(res.status + " " + res.statusText);
-        })
-        .then(json => this.setState({ results: json }));
+      loadPage("search?q=" + this.state.searchString, "").then(json =>
+        this.setState({ results: json })
+      );
     }
   };
 
@@ -134,11 +131,11 @@ class SmartTextarea extends Component {
           onChange={this.updateContent}
           data-test="smart-textarea"
         ></textarea>
-        {this.state.popupOpen ? (
+        {this.state.results.length > 0 ? (
           <Popup left={this.state.left} top={this.state.top} data-test="popup">
             <ListOfResults
               results={this.state.results}
-              autocomplete={this.autocomplete}
+              autocomplete={this.insertChoice}
             ></ListOfResults>
           </Popup>
         ) : (

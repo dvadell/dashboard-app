@@ -16,10 +16,11 @@ class Popup extends Component {
     this.popup.style.zIndex = 99;
     this.popup.style.position = "absolute";
     this.popup.style.backgroundColor = "white";
-    this.popup.style.borderWidth = 1;
-    this.popup.style.width =
-      (window.screen.width - this.props.left) * 0.9 + "px";
-    this.popup.style.height = "190px";
+    this.popup.style.borderWidth = "1px";
+    this.popup.style.borderColor = "gray";
+    this.popup.style.borderStyle = "solid";
+    this.popup.style.padding = "1rem";
+    this.popup.style.minHeight = "190px";
     document.body.appendChild(this.popup);
   }
 

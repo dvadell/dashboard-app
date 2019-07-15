@@ -5,26 +5,28 @@ const API_URL = "http://localhost:9000/api/v1/";
  * @param {string} version - The version
  * @returns {Promise} - with json as first argument
  */
-export const loadPage = (title, version = "current") => {
-  return fetch(API_URL + "quieros/" + title + "?version=" + version).then(
-    res => {
-      if (res.ok) {
-        var contentType = res.headers.get("content-type");
-        var contentLength = res.headers.get("content-length");
+export const loadPage = (title, version) => {
+  let titleWithVersion = title;
+  if (version) {
+    titleWithVersion = title + "?version=" + version;
+  }
+  return fetch(API_URL + "quieros/" + titleWithVersion).then(res => {
+    if (res.ok) {
+      var contentType = res.headers.get("content-type");
+      var contentLength = res.headers.get("content-length");
 
-        if (contentLength && contentLength < 1) {
-          throw new Error("loadPage: Empty response for!", title);
-        }
-
-        if (contentType && contentType.includes("application/json")) {
-          return res.json();
-        } else {
-          throw new Error("Content-Type is not JSON, but", contentType);
-        }
+      if (contentLength && contentLength < 1) {
+        throw new Error("loadPage: Empty response for!", title);
       }
-      throw new Error(res.status + " " + res.statusText);
+
+      if (contentType && contentType.includes("application/json")) {
+        return res.json();
+      } else {
+        throw new Error("Content-Type is not JSON, but", contentType);
+      }
     }
-  );
+    throw new Error(res.status + " " + res.statusText);
+  });
 };
 
 /** saves/Posts a page by title
