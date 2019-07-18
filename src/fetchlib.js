@@ -1,4 +1,14 @@
-const API_URL = "http://localhost:9000/api/v1/";
+import { ApolloClient } from "apollo-client";
+import { createHttpLink } from "apollo-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import gql from "graphql-tag";
+const httpLink = createHttpLink({
+  uri: "http://localhost:4000/graphql"
+});
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+});
 
 /** fetches a page by title
  * @param {string} title - The title of the page.
@@ -10,23 +20,31 @@ export const loadPage = (title, version) => {
   if (version) {
     titleWithVersion = title + "?version=" + version;
   }
-  return fetch(API_URL + "quieros/" + titleWithVersion).then(res => {
-    if (res.ok) {
-      var contentType = res.headers.get("content-type");
-      var contentLength = res.headers.get("content-length");
-
-      if (contentLength && contentLength < 1) {
-        throw new Error("loadPage: Empty response for!", title);
+  return client
+    .query({
+      query: gql`
+        query($title: String!) {
+          getProject(title: $title) {
+            title
+            description
+            cons
+            pros
+            viewHandler
+            whatDoINeed
+            whatFor
+            nextSteps
+            version
+          }
+        }
+      `,
+      variables: {
+        title: title
       }
-
-      if (contentType && contentType.includes("application/json")) {
-        return res.json();
-      } else {
-        throw new Error("Content-Type is not JSON, but", contentType);
-      }
-    }
-    throw new Error(res.status + " " + res.statusText);
-  });
+    })
+    .then(
+      response =>
+        new Promise((resolve, reject) => resolve(response.data.getProject))
+    );
 };
 
 /** saves/Posts a page by title
@@ -36,14 +54,32 @@ export const loadPage = (title, version) => {
  */
 export const savePage = (title, json) => {
   console.log(json);
-  return fetch(API_URL + "quieros/" + title, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(json)
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    throw new Error(res.status + " " + res.statusText);
+  return client.mutate({
+    mutation: gql`
+      mutation(
+        $title: String!
+        $description: String
+        $cons: String
+        $pros: String
+        $viewHandler: String
+        $whatDoINeed: String
+        $whatFor: String
+        $nextSteps: String
+      ) {
+        saveProject(
+          title: $title
+          description: $description
+          cons: $cons
+          pros: $pros
+          viewHandler: $viewHandler
+          whatDoINeed: $whatDoINeed
+          whatFor: $whatFor
+          nextSteps: $nextSteps
+        ) {
+          title
+        }
+      }
+    `,
+    variables: json
   });
 };

@@ -3,9 +3,12 @@
   "version": "0.3.0",
   "private": true,
   "dependencies": {
+    "apollo-boost": "^0.4.3",
     "caret-xy": "^2.0.3",
+    "graphql": "^14.4.2",
     "mousetrap": "^1.6.3",
     "react": "^16.8.6",
+    "react-apollo": "^2.5.8",
     "react-burger-menu": "^2.6.10",
     "react-calendar": "^2.19.0",
     "react-dom": "^16.8.6",
