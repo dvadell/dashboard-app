@@ -5,10 +5,7 @@ import { getPageAction, savePageAction } from "./actions";
 import Agenda from "./plugins/Agenda/Agenda";
 import Project from "./plugins/Project/Project";
 import { savePage } from "./fetchlib";
-
 import "./App.css";
-
-const API_URL = "http://localhost:9000/api/v1/";
 
 const mapStateToProps = state => {
   return {
@@ -60,11 +57,6 @@ class App extends Component {
     console.log("saving", newState);
 
     if (newState.description === undefined) return false; // Just a safeguard
-    // fetch(API_URL + "quieros/" + this.props.page.title, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(newState)
-    // });
     savePage(this.props.page.title, newState);
   };
 

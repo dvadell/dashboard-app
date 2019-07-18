@@ -49,19 +49,4 @@ export const savePageAction = page => dispatch => {
     type: SAVE_PAGE_PENDING
   });
   dispatch({ type: SAVE_PAGE_SUCCESS, payload: page });
-  // fetch(API_URL + "quieros/" + title)
-  // .then(res => {
-  //     if (res.ok) {
-  //         return res.json()
-  //     }
-  //     throw new Error(res.status + ' ' + res.statusText)
-  // })
-  // .then(json => {
-  //     if (json.error) {
-  //         dispatch({ type: SAVE_PAGE_FAILURE,  payload: json })
-  //     } else {
-  //         dispatch({ type: SAVE_PAGE_SUCCESS, payload: json })
-  //     }
-  // })
-  // .catch(error => dispatch({ type: SAVE_PAGE_SUCCESS, payload: error }));
 };

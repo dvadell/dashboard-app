@@ -42,15 +42,14 @@ export const loadPage = (title, version) => {
       }
     })
     .then(
-      response =>
-        new Promise((resolve, reject) => resolve(response.data.getProject))
+      response => new Promise(resolve => resolve(response.data.getProject))
     );
 };
 
 /** saves/Posts a page by title
  * @param {string} title - The title of the page.
  * @param {Object} json - The content, in json format
- * @returns {Promise} - with json as first argument
+ * @returns {Promise} - with a json object as first argument
  */
 export const savePage = (title, json) => {
   console.log(json);
