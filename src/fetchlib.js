@@ -12,7 +12,7 @@ const client = new ApolloClient({
 
 /** fetches a page by title
  * @param {string} title - The title of the page.
- * @param {string} version - The version
+ * @param {string} version - The version // TODO
  * @returns {Promise} - with json as first argument
  */
 export const loadPage = (title, version) => {
@@ -44,6 +44,38 @@ export const loadPage = (title, version) => {
     })
     .then(
       response => new Promise(resolve => resolve(response.data.getProject))
+    );
+};
+
+/** searches for pages by title
+ * @param {string} query - What to look for in the title
+ * @returns {Promise} - with json as first argument
+ */
+export const searchForPagesContaining = query => {
+  return client
+    .query({
+      query: gql`
+        query($query: String!) {
+          searchProject(query: $query) {
+            title
+            description
+            cons
+            pros
+            viewHandler
+            whatDoINeed
+            whatFor
+            nextSteps
+            notes
+            version
+          }
+        }
+      `,
+      variables: {
+        query
+      }
+    })
+    .then(
+      response => new Promise(resolve => resolve(response.data.searchProject))
     );
 };
 

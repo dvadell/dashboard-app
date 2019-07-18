@@ -3,7 +3,7 @@ import caretXY from "caret-xy";
 import "./SmartTextarea.css";
 import Popup from "./Popup";
 import ListOfResults from "./ListOfResults";
-import { loadPage } from "../../fetchlib";
+import { searchForPagesContaining } from "../../fetchlib";
 /**
  * @class SmartTextarea
  * @param {string} contents - the initial (saved) content
@@ -100,7 +100,7 @@ class SmartTextarea extends Component {
       console.log({ newSearchString });
 
       // IDK why, but setState was taking it's time to update. I had to move the
-      // fetch() (in updatePopup()) to a callback after setState does it's thing.
+      // updatePopup() to a callback after setState does it's thing.
       this.setState(prevState => {
         return { searchString: newSearchString };
       }, this.updatePopup);
@@ -110,7 +110,7 @@ class SmartTextarea extends Component {
   updatePopup = () => {
     console.log("Updating popup with", this.state.searchString);
     if (this.state.searchString && this.state.searchString.length > 1) {
-      loadPage("search?q=" + this.state.searchString, "").then(json =>
+      searchForPagesContaining(this.state.searchString).then(json =>
         this.setState({ results: json })
       );
     }

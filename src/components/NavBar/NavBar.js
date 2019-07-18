@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import SideBar from "../../components/SideBar/SideBar";
 import { getPageAction } from "../../actions";
+import { loadPage, savePage } from "../../fetchlib";
 import "./NavBar.css";
-const API_URL = "http://localhost:9000/api/v1/";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -35,21 +35,22 @@ class NavBar extends Component {
   };
 
   handleInput = e => {
-    //         content:   { type: String, default: '' },
-    // relatedTo: { type: String, default: '' },
-    // timestamp: { type: Date,   default: Date.now },
-    // title:     { type: String }
-    console.log("key", e.key);
-    if (e.key === "Enter") {
-      fetch(API_URL + "list/thoughts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          relatedTo: this.props.title,
-          content: this.state.content
-        })
+    // We send the thought when pressing Enter, but not if pressing Shift+Enter
+    console.log("key", e.key, "shift:", e.shiftKey);
+    if (e.key === "Enter" && !e.shiftKey) {
+      loadPage("list of thoughts").then(json => {
+        json.description =
+          json.description +
+          "\n* " +
+          this.state.content +
+          "\n// Note: written while in " +
+          this.props.title +
+          " at " +
+          new Date().toString();
+        savePage("list of thoughts", json).then(() =>
+          this.setState({ content: "" })
+        );
       });
-      this.setState({ content: "" });
     }
   };
 
