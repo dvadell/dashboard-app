@@ -33,6 +33,7 @@ export const loadPage = (title, version) => {
             whatDoINeed
             whatFor
             nextSteps
+            notes
             version
           }
         }
@@ -53,32 +54,38 @@ export const loadPage = (title, version) => {
  */
 export const savePage = (title, json) => {
   console.log(json);
-  return client.mutate({
-    mutation: gql`
-      mutation(
-        $title: String!
-        $description: String
-        $cons: String
-        $pros: String
-        $viewHandler: String
-        $whatDoINeed: String
-        $whatFor: String
-        $nextSteps: String
-      ) {
-        saveProject(
-          title: $title
-          description: $description
-          cons: $cons
-          pros: $pros
-          viewHandler: $viewHandler
-          whatDoINeed: $whatDoINeed
-          whatFor: $whatFor
-          nextSteps: $nextSteps
+  return client
+    .mutate({
+      mutation: gql`
+        mutation(
+          $title: String!
+          $description: String
+          $cons: String
+          $pros: String
+          $viewHandler: String
+          $whatDoINeed: String
+          $whatFor: String
+          $nextSteps: String
+          $notes: String
         ) {
-          title
+          saveProject(
+            title: $title
+            description: $description
+            cons: $cons
+            pros: $pros
+            viewHandler: $viewHandler
+            whatDoINeed: $whatDoINeed
+            whatFor: $whatFor
+            nextSteps: $nextSteps
+            notes: $notes
+          ) {
+            title
+          }
         }
-      }
-    `,
-    variables: json
-  });
+      `,
+      variables: json
+    })
+    .then(
+      response => new Promise(resolve => resolve(response.data.saveProject))
+    );
 };

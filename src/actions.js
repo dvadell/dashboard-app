@@ -28,6 +28,11 @@ export const setLanguageAction = lang => ({
   payload: lang
 });
 
+/**
+ * @function getPageAction
+ * @param {string} title - The title of the page to get
+ * @returns {function(dispatch)}  - Action (function) that gets the page and dipatches it's status
+ */
 export const getPageAction = title => dispatch => {
   dispatch({
     type: GET_PAGE_PENDING

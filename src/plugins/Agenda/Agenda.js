@@ -37,20 +37,12 @@ const Agenda = React.forwardRef((props, myRefs) => {
                 doSave={doSave("whatFor")}
               />
             </AccordeonItem>
-            <AccordeonItem title="Pros">
+            <AccordeonItem title="Notes">
               <PanelItem
-                name="pros"
-                ref={props.myRefs.pros}
-                content={props.page.pros}
-                doSave={doSave("pros")}
-              />
-            </AccordeonItem>
-            <AccordeonItem title="Cons">
-              <PanelItem
-                name="cons"
-                ref={props.myRefs.cons}
-                content={props.page.cons}
-                doSave={doSave("cons")}
+                name="notes"
+                ref={props.myRefs.notes}
+                content={props.page.notes}
+                doSave={doSave("notes")}
               />
             </AccordeonItem>
           </Accordeon>
