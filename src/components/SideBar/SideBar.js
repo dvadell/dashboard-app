@@ -46,12 +46,13 @@ class SideBar extends Component {
     this.setState({ modalIsOpen: false });
   };
   openModal = () => {
-    this.setState({ menuOpen: false });
-    this.setState({ modalIsOpen: true });
+    // Again, if I fire both this.setState, the modal looses focus. I have to
+    // run one as a callback of the other.
+    this.setState({ menuOpen: false }, () =>
+      this.setState({ modalIsOpen: true })
+    );
   };
-  // This can be used to toggle the menu, e.g. when using a custom icon
-  // Tip: You probably want to hide either/both default icons if using a custom icon
-  // See https://github.com/negomi/react-burger-menu#custom-icons
+
   toggleMenu() {
     this.setState(state => ({ menuOpen: !state.menuOpen }));
   }
@@ -119,7 +120,6 @@ class SideBar extends Component {
           )}
           {this.createItem(<Localize>Today</Localize>, today)}
           {this.createItem(<Localize>Settings</Localize>, "/settings")}
-          {/* {this.createItem(<Localize>Search</Localize>, "/search")} */}
           <button onClick={this.openModal}>
             <Localize>Search</Localize>
           </button>

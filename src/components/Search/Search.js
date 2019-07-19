@@ -31,11 +31,12 @@ class Search extends Component {
         <div className="search-navbar">
           <div className="input-div">
             <input
+              autoFocus={true}
               className="input-search"
               onChange={this.updateContent}
-              placeholder=""
-              aria-label=""
-            ></input>
+              placeholder="Search here..."
+              aria-label="search"
+            />
           </div>
 
           <div>
