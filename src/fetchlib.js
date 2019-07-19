@@ -1,49 +1,85 @@
-const API_URL = "http://localhost:9000/api/v1/";
+import { ApolloClient } from "apollo-client";
+import { createHttpLink } from "apollo-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import {
+  LOAD_PAGE,
+  LOAD_RANDOM_PAGE,
+  SEARCH_FOR_PAGES_CONTAINING
+} from "./graphql/Queries";
+import { SAVE_PAGE } from "./graphql/Mutations";
+
+const httpLink = createHttpLink({
+  uri: "http://localhost:4000/graphql"
+});
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+});
 
 /** fetches a page by title
  * @param {string} title - The title of the page.
- * @param {string} version - The version
+ * @param {string} version - The version // TODO
  * @returns {Promise} - with json as first argument
  */
-export const loadPage = (title, version) => {
-  let titleWithVersion = title;
-  if (version) {
-    titleWithVersion = title + "?version=" + version;
-  }
-  return fetch(API_URL + "quieros/" + titleWithVersion).then(res => {
-    if (res.ok) {
-      var contentType = res.headers.get("content-type");
-      var contentLength = res.headers.get("content-length");
-
-      if (contentLength && contentLength < 1) {
-        throw new Error("loadPage: Empty response for!", title);
+export const loadPage = title => {
+  return client
+    .query({
+      query: LOAD_PAGE,
+      variables: {
+        title: title
       }
+    })
+    .then(
+      response => new Promise(resolve => resolve(response.data.getProject))
+    );
+};
 
-      if (contentType && contentType.includes("application/json")) {
-        return res.json();
-      } else {
-        throw new Error("Content-Type is not JSON, but", contentType);
+/** fetches a random page
+ * @returns {Promise} - with json as first argument
+ */
+export const loadRandomPage = () => {
+  console.log(client);
+  return client
+    .query({
+      query: LOAD_RANDOM_PAGE,
+      fetchPolicy: "no-cache"
+    })
+    .then(
+      response =>
+        new Promise(resolve => resolve(response.data.getRandomProject))
+    );
+};
+
+/** searches for pages by title
+ * @param {string} query - What to look for in the title
+ * @returns {Promise} - with json as first argument
+ */
+export const searchForPagesContaining = query => {
+  return client
+    .query({
+      query: SEARCH_FOR_PAGES_CONTAINING,
+      variables: {
+        query
       }
-    }
-    throw new Error(res.status + " " + res.statusText);
-  });
+    })
+    .then(
+      response => new Promise(resolve => resolve(response.data.searchProject))
+    );
 };
 
 /** saves/Posts a page by title
  * @param {string} title - The title of the page.
  * @param {Object} json - The content, in json format
- * @returns {Promise} - with json as first argument
+ * @returns {Promise} - with a json object as first argument
  */
 export const savePage = (title, json) => {
   console.log(json);
-  return fetch(API_URL + "quieros/" + title, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(json)
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    throw new Error(res.status + " " + res.statusText);
-  });
+  return client
+    .mutate({
+      mutation: SAVE_PAGE,
+      variables: json
+    })
+    .then(
+      response => new Promise(resolve => resolve(response.data.saveProject))
+    );
 };

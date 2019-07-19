@@ -1,3 +1,5 @@
-/* .big-container {
-    margin-bottom: 400px;
-} */
+.main-title {
+  text-align: "center";
+  text-transform: capitalize;
+  margin-top: 1rem;
+}

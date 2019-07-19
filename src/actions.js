@@ -8,7 +8,7 @@ import {
   // SAVE_PAGE_FAILURE,
   SET_VIEW
 } from "./constants";
-import { loadPage, savePage } from "./fetchlib";
+import { loadPage, loadRandomPage } from "./fetchlib";
 
 /**
  * @function setViewAction
@@ -28,6 +28,11 @@ export const setLanguageAction = lang => ({
   payload: lang
 });
 
+/**
+ * @function getPageAction
+ * @param {string} title - The title of the page to get
+ * @returns {function(dispatch)}  - Action (function) that gets the page and dipatches it's status
+ */
 export const getPageAction = title => dispatch => {
   dispatch({
     type: GET_PAGE_PENDING
@@ -37,11 +42,32 @@ export const getPageAction = title => dispatch => {
       if (json.error) {
         dispatch({ type: GET_PAGE_FAILURE, payload: json });
       } else {
+        window.history.pushState({}, json.title, json.title);
         dispatch({ type: GET_PAGE_SUCCESS, payload: json });
       }
     })
     .catch(error => dispatch({ type: GET_PAGE_FAILURE, payload: error }));
-  window.history.pushState({}, title, title);
+};
+
+/**
+ * @function getPageAction
+ * @param {string} title - The title of the page to get
+ * @returns {function(dispatch)}  - Action (function) that gets the page and dipatches it's status
+ */
+export const getRandomPageAction = () => dispatch => {
+  dispatch({
+    type: GET_PAGE_PENDING
+  });
+  loadRandomPage()
+    .then(json => {
+      if (json.error) {
+        dispatch({ type: GET_PAGE_FAILURE, payload: json });
+      } else {
+        window.history.pushState({}, json.title, json.title);
+        dispatch({ type: GET_PAGE_SUCCESS, payload: json });
+      }
+    })
+    .catch(error => dispatch({ type: GET_PAGE_FAILURE, payload: error }));
 };
 
 export const savePageAction = page => dispatch => {
@@ -49,19 +75,4 @@ export const savePageAction = page => dispatch => {
     type: SAVE_PAGE_PENDING
   });
   dispatch({ type: SAVE_PAGE_SUCCESS, payload: page });
-  // fetch(API_URL + "quieros/" + title)
-  // .then(res => {
-  //     if (res.ok) {
-  //         return res.json()
-  //     }
-  //     throw new Error(res.status + ' ' + res.statusText)
-  // })
-  // .then(json => {
-  //     if (json.error) {
-  //         dispatch({ type: SAVE_PAGE_FAILURE,  payload: json })
-  //     } else {
-  //         dispatch({ type: SAVE_PAGE_SUCCESS, payload: json })
-  //     }
-  // })
-  // .catch(error => dispatch({ type: SAVE_PAGE_SUCCESS, payload: error }));
 };

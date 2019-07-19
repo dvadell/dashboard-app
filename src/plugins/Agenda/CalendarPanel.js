@@ -15,16 +15,9 @@ const CalendarPanel = props => {
     props.loadEverything(formattedDate);
   };
 
-  const saveUpcomingEvents = () => {
-    console.log("saveUpcomingEvents");
-  };
-
   return (
     <div>
-      <Calendar
-        //   value={this.state.date}
-        onClickDay={onClickDay}
-      />
+      <Calendar onClickDay={onClickDay} />
       <EmbeddedPage title="upcomingEvents" member="description" />
     </div>
   );

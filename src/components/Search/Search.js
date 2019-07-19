@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Results from "./Results";
+import { searchForPagesContaining } from "../../fetchlib";
 import "./Search.css";
-
-const API_URL = "http://localhost:9000/api/v1/";
 
 class Search extends Component {
   constructor(props) {
@@ -20,14 +19,9 @@ class Search extends Component {
     this.setState({ content });
 
     if (content.length > 1) {
-      fetch(API_URL + "quieros/search?q=" + content)
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw new Error(res.status + " " + res.statusText);
-        })
-        .then(json => this.setState({ results: json }));
+      searchForPagesContaining(content).then(json =>
+        this.setState({ results: json })
+      );
     }
   };
 
