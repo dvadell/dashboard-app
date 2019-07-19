@@ -21,11 +21,7 @@ const client = new ApolloClient({
  * @param {string} version - The version // TODO
  * @returns {Promise} - with json as first argument
  */
-export const loadPage = (title, version) => {
-  let titleWithVersion = title;
-  if (version) {
-    titleWithVersion = title + "?version=" + version;
-  }
+export const loadPage = title => {
   return client
     .query({
       query: LOAD_PAGE,

@@ -48,8 +48,7 @@ class SmartTextarea extends Component {
     this.setState({
       popupOpen: false,
       searchString: "",
-      results: [],
-      searchString: ""
+      results: []
     });
   };
 

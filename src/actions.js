@@ -8,7 +8,7 @@ import {
   // SAVE_PAGE_FAILURE,
   SET_VIEW
 } from "./constants";
-import { loadPage, savePage, loadRandomPage } from "./fetchlib";
+import { loadPage, loadRandomPage } from "./fetchlib";
 
 /**
  * @function setViewAction
