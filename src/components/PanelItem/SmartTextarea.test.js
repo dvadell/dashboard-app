@@ -23,11 +23,10 @@ describe("SmartTextarea", () => {
     expect(textarea.length).toBe(1);
   });
 
-  it("renders a Popup when [[ // TODO!", () => {
-    let state = { popupOpen: true };
+  it("renders a Popup when [[xxx", () => {
+    let state = { results: "xxx" };
     let wrapper = setup({}, state);
     let Popup = findByDataTestAttr(wrapper, "popup");
-    console.log(Popup.debug());
     expect(Popup.length).toBe(1);
   });
 });

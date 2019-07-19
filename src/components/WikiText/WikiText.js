@@ -40,7 +40,9 @@ export const rules = {
   header2: ["=== ", undefined, " ==="],
   header3: ["==== ", undefined, " ===="],
   header4: ["===== ", undefined, " ====="],
-  bullet: ["* ", undefined, "\n"],
+  bullet1: ["* ", undefined, "\n"],
+  bullet2: ["** ", undefined, "\n"],
+  bullet3: ["*** ", undefined, "\n"],
   p: ["\n\n", undefined, wikiText => ["dummy", wikiText]],
   hr: ["----", undefined, wikiText => ["dummy", wikiText]],
   comment: [
@@ -212,7 +214,21 @@ export const treeToReact = tree => {
         {treeToReact(content)}
       </h4>
     ),
-    bullet: content => <div key={randomKey++}>• {treeToReact(content)}</div>,
+    bullet1: content => (
+      <div data-test="bullet1" key={randomKey++}>
+        • {treeToReact(content)}
+      </div>
+    ),
+    bullet2: content => (
+      <div data-test="bullet2" className="bullet2-wiki" key={randomKey++}>
+        • {treeToReact(content)}
+      </div>
+    ),
+    bullet3: content => (
+      <div data-test="bullet3" className="bullet3-wiki" key={randomKey++}>
+        • {treeToReact(content)}
+      </div>
+    ),
     p: content => <p key={randomKey++}></p>,
     hr: content => <hr key={randomKey++} />,
     comment: content => (
@@ -222,10 +238,10 @@ export const treeToReact = tree => {
     )
   };
   return tree.map(tag => {
-    if (tag.type) {
+    if (tagToReact[tag.type]) {
       return tagToReact[tag.type](tag.content);
     } else {
-      console.log("Hmmm... no handler for", tag.type);
+      return "Hmmm... no handler for " + tag.type;
     }
   });
 };

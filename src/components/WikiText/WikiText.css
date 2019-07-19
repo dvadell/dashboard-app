@@ -25,3 +25,11 @@ h4.wiki {
   font-size: 0.8rem;
   font-weight: bold;
 }
+
+.bullet2-wiki {
+  margin-left: 1rem;
+}
+
+.bullet3-wiki {
+  margin-left: 2rem;
+}

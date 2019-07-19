@@ -7,6 +7,7 @@ import {
   separateTag,
   wikiParser
 } from "./WikiText";
+import { findByDataTestAttr } from "../../testlib/testlib";
 
 // it('expect to render WikiText component', () => {
 //     expect(shallow(<WikiText>dummy</WikiText>))
@@ -146,6 +147,34 @@ and not this`;
   });
 });
 
+describe("parse bullets", () => {
+  let wikiTextSimple = `
+Level0
+* Level1
+** Level2
+*** Level3
+Level0`;
+  it("from simple wikiText", () => {
+    let tree = wikiParser(wikiTextSimple, rules);
+    expect(tree[0]).toEqual("\nLevel0\n");
+
+    let wrapper = shallow(tree[1]);
+    expect(findByDataTestAttr(wrapper, "bullet1").length).toBe(1);
+
+    console.log("tree2", tree[2]); // empty
+    console.log("tree3", tree[3]);
+    wrapper = shallow(tree[3]);
+    expect(findByDataTestAttr(wrapper, "bullet2").length).toBe(1);
+
+    console.log("tree4", tree[4]); // empty
+    console.log("tree5", tree[5]);
+    wrapper = shallow(tree[5]);
+    expect(findByDataTestAttr(wrapper, "bullet3").length).toBe(1);
+
+    expect(tree[6]).toEqual("Level0");
+  });
+});
+
 describe("parse P", () => {
   let wikiTextSimple = `A line
 
@@ -163,23 +192,3 @@ and another`;
     expect(tree[2]).toEqual(expected[2]);
   });
 });
-
-// TODO! Doesn't pass :(
-// describe("Tasks", () => {
-//   let wikiTextWithTasks = `Tasks for today:
-// [ ] Do the laundry
-// [ ] Make some exercise
-// [x] Was the dishes
-// [w] Wait for the bus
-// Great!`;
-
-//   it("All kind of tasks - simple", () => {
-//     let tree = wikiParser(wikiTextWithTasks, rules);
-//     let expected = "";
-//     expect(tree[0]).toEqual("Tasks for today:\n");
-//     // expect(tree[1]).toEqual(
-//     //   <div className="task-unchecked">Do the laundry</div>
-//     // );
-//     expect(tree[2]).toEqual("Great!");
-//   });
-// });

@@ -38,7 +38,6 @@ export const loadPage = title => {
  * @returns {Promise} - with json as first argument
  */
 export const loadRandomPage = () => {
-  console.log(client);
   return client
     .query({
       query: LOAD_RANDOM_PAGE,
@@ -73,7 +72,6 @@ export const searchForPagesContaining = query => {
  * @returns {Promise} - with a json object as first argument
  */
 export const savePage = (title, json) => {
-  console.log(json);
   return client
     .mutate({
       mutation: SAVE_PAGE,
