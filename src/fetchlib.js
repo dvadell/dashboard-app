@@ -1,7 +1,13 @@
 import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import gql from "graphql-tag";
+import {
+  LOAD_PAGE,
+  LOAD_RANDOM_PAGE,
+  SEARCH_FOR_PAGES_CONTAINING
+} from "./graphql/Queries";
+import { SAVE_PAGE } from "./graphql/Mutations";
+
 const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql"
 });
@@ -22,28 +28,29 @@ export const loadPage = (title, version) => {
   }
   return client
     .query({
-      query: gql`
-        query($title: String!) {
-          getProject(title: $title) {
-            title
-            description
-            cons
-            pros
-            viewHandler
-            whatDoINeed
-            whatFor
-            nextSteps
-            notes
-            version
-          }
-        }
-      `,
+      query: LOAD_PAGE,
       variables: {
         title: title
       }
     })
     .then(
       response => new Promise(resolve => resolve(response.data.getProject))
+    );
+};
+
+/** fetches a random page
+ * @returns {Promise} - with json as first argument
+ */
+export const loadRandomPage = () => {
+  console.log(client);
+  return client
+    .query({
+      query: LOAD_RANDOM_PAGE,
+      fetchPolicy: "no-cache"
+    })
+    .then(
+      response =>
+        new Promise(resolve => resolve(response.data.getRandomProject))
     );
 };
 
@@ -54,22 +61,7 @@ export const loadPage = (title, version) => {
 export const searchForPagesContaining = query => {
   return client
     .query({
-      query: gql`
-        query($query: String!) {
-          searchProject(query: $query) {
-            title
-            description
-            cons
-            pros
-            viewHandler
-            whatDoINeed
-            whatFor
-            nextSteps
-            notes
-            version
-          }
-        }
-      `,
+      query: SEARCH_FOR_PAGES_CONTAINING,
       variables: {
         query
       }
@@ -88,33 +80,7 @@ export const savePage = (title, json) => {
   console.log(json);
   return client
     .mutate({
-      mutation: gql`
-        mutation(
-          $title: String!
-          $description: String
-          $cons: String
-          $pros: String
-          $viewHandler: String
-          $whatDoINeed: String
-          $whatFor: String
-          $nextSteps: String
-          $notes: String
-        ) {
-          saveProject(
-            title: $title
-            description: $description
-            cons: $cons
-            pros: $pros
-            viewHandler: $viewHandler
-            whatDoINeed: $whatDoINeed
-            whatFor: $whatFor
-            nextSteps: $nextSteps
-            notes: $notes
-          ) {
-            title
-          }
-        }
-      `,
+      mutation: SAVE_PAGE,
       variables: json
     })
     .then(

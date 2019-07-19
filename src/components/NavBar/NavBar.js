@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import SideBar from "../../components/SideBar/SideBar";
-import { getPageAction } from "../../actions";
+import { getPageAction, getRandomPageAction } from "../../actions";
 import { loadPage, savePage } from "../../fetchlib";
 import "./NavBar.css";
 
 const mapDispatchToProps = dispatch => {
   return {
-    getPage: title => dispatch(getPageAction(title))
+    getPage: title => dispatch(getPageAction(title)),
+    getRandomPage: title => dispatch(getRandomPageAction())
   };
 };
 
@@ -26,8 +27,7 @@ class NavBar extends Component {
   }
 
   goToRandom = () => {
-    this.props.getPage("random");
-    window.history.pushState({}, "random", "random");
+    this.props.getRandomPage("random");
   };
 
   updateContent = e => {
