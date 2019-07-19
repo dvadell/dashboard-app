@@ -19,7 +19,7 @@ const Agenda = React.forwardRef((props, myRefs) => {
         </div>
 
         <div className="col-md-6 col-xs-12">
-          <h2 style={{ textAlign: "center" }}>{props.page.title}</h2>
+          <h2 className="main-title text-center">{props.page.title}</h2>
           <PanelItem
             name="description"
             ref={props.myRefs.description}
