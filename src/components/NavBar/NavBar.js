@@ -34,6 +34,23 @@ class NavBar extends Component {
     this.setState({ content: e.target.value });
   };
 
+  appendLeadingZeroes = n => (n < 10 ? "0" + n : n);
+
+  formatDate = date => {
+    return (
+      date.getFullYear() +
+      "-" +
+      this.appendLeadingZeroes(date.getMonth() + 1) +
+      "-" +
+      this.appendLeadingZeroes(date.getDate()) +
+      " " +
+      this.appendLeadingZeroes(date.getHours()) +
+      ":" +
+      this.appendLeadingZeroes(date.getMinutes()) +
+      "hs"
+    );
+  };
+
   handleInput = e => {
     // We send the thought when pressing Enter, but not if pressing Shift+Enter
     console.log("key", e.key, "shift:", e.shiftKey);
@@ -43,10 +60,10 @@ class NavBar extends Component {
           json.description +
           "\n* " +
           this.state.content +
-          "\n// Note: written while in " +
+          "\n// Note: written while in [[" +
           this.props.title +
-          " at " +
-          new Date().toString();
+          "]] at " +
+          this.formatDate(new Date());
         savePage("list of thoughts", json).then(() =>
           this.setState({ content: "" })
         );
