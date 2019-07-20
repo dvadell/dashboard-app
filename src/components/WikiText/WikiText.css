@@ -9,11 +9,13 @@
 h1.wiki {
   font-size: 1.5rem;
   font-weight: bold;
+  margin-top: 1.5rem;
 }
 
 h2.wiki {
   font-size: 1.2rem;
   font-weight: bold;
+  margin-top: 1rem;
 }
 
 h3.wiki {
