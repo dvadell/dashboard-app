@@ -119,14 +119,16 @@ class SmartTextarea extends Component {
 
   render() {
     return (
-      <div>
+      // this paddingTop is the size of the edit/upload icon. If I don't set
+      // it, when the textarea grows, the icon gets hidden; and as there's no
+      // scrollbar (see overflow css property), it gets lost.
+      <div style={{ paddingTop: "16px" }}>
         <textarea
           onKeyUp={this.updateCaretPos}
           name={this.props.name}
           placeholder="Write!"
           value={this.props.content}
-          className="form-control mousetrap markup"
-          rows="20"
+          className="smart-textarea mousetrap markup"
           onChange={this.updateContent}
           data-test="smart-textarea"
         ></textarea>

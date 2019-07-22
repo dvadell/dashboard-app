@@ -1,19 +1,20 @@
-.accordion-item-content,
+/*  There's a minimum height, set in AccordeonItem.js
+ */
 .accordion .accordion-item--default .accordion-item-content {
-    height: 12em;
+  height: 12em; /* dummy height */
 }
 
-.accordion-item-content,
 .accordion-item-content {
-    height: 0;
-    overflow: hidden;
-    transition: height .25s;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.25s;
 }
 
 .accordion {
-    padding: 0;
-    margin: 0 auto;
-    font-family: "PT Sans" sans-serif
+  padding: 0;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  font-family: "PT Sans" sans-serif;
 }
 
 .accordion .accordion-item {
