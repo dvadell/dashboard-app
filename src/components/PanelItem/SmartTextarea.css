@@ -1,9 +1,6 @@
 .smart-textarea {
   min-height: 4rem;
-  height: 100%;
-  height: -moz-available;
-  height: -webkit-fill-available;
-  height: fill-available;
+  height: 20rem;
   width: 100%;
   width: -moz-available;
   width: -webkit-fill-available;
