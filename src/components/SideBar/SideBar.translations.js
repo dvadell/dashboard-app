@@ -4,15 +4,20 @@ const translations = {
     es_es: "Configuración",
     en: "Settings"
   },
-  "Project List": {
-    es_ar: "Lista de Proyectos",
-    es_es: "Lista de Proyectos",
-    en: "Project List"
+  "As Agenda": {
+    es_ar: "Como agenda",
+    es_es: "Como agenda",
+    en: "As Agenda"
   },
-  Today: {
-    es_ar: "Hoy",
-    es_es: "Hoy",
-    en: "Today"
+  "As Project": {
+    es_ar: "Como proyecto",
+    es_es: "Como proyecto",
+    en: "As Project"
+  },
+  "As Meta": {
+    es_ar: "Como meta",
+    es_es: "Como meta",
+    en: "As Meta"
   },
   Search: {
     es_ar: "Buscar",

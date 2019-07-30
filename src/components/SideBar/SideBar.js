@@ -57,18 +57,32 @@ class SideBar extends Component {
     this.setState(state => ({ menuOpen: !state.menuOpen }));
   }
 
-  createItem = (text, link, forcedViewHandler) => {
+  // createItem = (text, link, forcedViewHandler) => {
+  //   return (
+  //     <LinkWithRedux
+  //       onClick={() => {
+  //         this.closeMenu();
+  //         forcedViewHandler && this.props.setView(forcedViewHandler);
+  //       }}
+  //       className="menu-item"
+  //       to={link}
+  //     >
+  //       {text}
+  //     </LinkWithRedux>
+  //   );
+  // };
+
+  createItem = (text, onClick) => {
     return (
-      <LinkWithRedux
+      <span
+        className="sidebar-item"
         onClick={() => {
+          onClick();
           this.closeMenu();
-          forcedViewHandler && this.props.setView(forcedViewHandler);
         }}
-        className="menu-item"
-        to={link}
       >
         {text}
-      </LinkWithRedux>
+      </span>
     );
   };
 
@@ -92,34 +106,20 @@ class SideBar extends Component {
           <small>
             <Localize>View as...</Localize>
           </small>
-          {this.props.viewHandler === "ag" ? (
-            <button
-              onClick={() => {
-                this.props.setView("pr");
-                this.closeMenu();
-              }}
-            >
-              As Project
-            </button>
-          ) : (
-            <button
-              onClick={() => {
-                this.props.setView("ag");
-                this.closeMenu();
-              }}
-            >
-              As Agenda
-            </button>
+          {this.createItem(<Localize>As Agenda</Localize>, () =>
+            this.props.setView("ag")
+          )}
+          {this.createItem(<Localize>As Project</Localize>, () =>
+            this.props.setView("pr")
+          )}
+          {this.createItem(<Localize>As Meta</Localize>, () =>
+            this.props.setView("meta")
           )}
 
           <hr></hr>
-          {this.createItem(
-            <Localize>Project List</Localize>,
-            "Project List",
-            "pr"
+          {this.createItem(<Localize>Settings</Localize>, () =>
+            console.log("settings")
           )}
-          {this.createItem(<Localize>Today</Localize>, today)}
-          {this.createItem(<Localize>Settings</Localize>, "/settings")}
           <button onClick={this.openModal}>
             <Localize>Search</Localize>
           </button>

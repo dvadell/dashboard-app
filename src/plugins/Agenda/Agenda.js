@@ -2,11 +2,15 @@ import React from "react";
 import Accordeon from "../../components/Accordeon/Accordeon";
 import AccordeonItem from "../../components/Accordeon/AccordeonItem";
 import CalendarPanel from "./CalendarPanel";
+import AccordeonItemWithPanel from "../../components/AccordeonItemWithPanel";
 import PanelItem from "../../components/PanelItem/PanelItem";
 import "./Agenda.css";
 
 const Agenda = React.forwardRef((props, myRefs) => {
-  const doSave = name => content => props.doSave();
+  const doSave = name => content => {
+    console.log("guardando:", { name, content });
+    props.doSave();
+  };
 
   return (
     <div id="content" className="container-fluid d-flex h-100 flex-column">
@@ -29,22 +33,34 @@ const Agenda = React.forwardRef((props, myRefs) => {
         </div>
         <div className="col-md-3 col-xs-12">
           <Accordeon>
-            <AccordeonItem title="What for?">
+            {/* <AccordeonItem title="What for?">
               <PanelItem
                 name="whatFor"
                 ref={props.myRefs.whatFor}
                 content={props.page.whatFor}
                 doSave={doSave("whatFor")}
               />
-            </AccordeonItem>
-            <AccordeonItem title="Notes">
+            </AccordeonItem> */}
+            <AccordeonItemWithPanel
+              name="whatFor"
+              doSave={doSave("whatFor")}
+              ref={props.myRefs.whatFor}
+              content={props.page.whatFor}
+            />
+            <AccordeonItemWithPanel
+              name="notes"
+              doSave={doSave("notes")}
+              ref={props.myRefs.notes}
+              content={props.page.notes}
+            />
+            {/* <AccordeonItem title="Notes">
               <PanelItem
                 name="notes"
                 ref={props.myRefs.notes}
                 content={props.page.notes}
                 doSave={doSave("notes")}
               />
-            </AccordeonItem>
+            </AccordeonItem> */}
           </Accordeon>
         </div>
       </div>

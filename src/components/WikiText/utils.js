@@ -5,6 +5,9 @@ export const splitInTwo = (string, sep, keepSep = false) => {
     return sep(string);
   }
 
+  // No separator means it separates at character 0
+  if (!sep) return ["dummy", string];
+
   let index = string.indexOf(sep);
 
   if (index === -1) {

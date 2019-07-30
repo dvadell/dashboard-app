@@ -1,20 +1,5 @@
 .floatRight {
   float: right;
-  /* position: -webkit-sticky; 
-  position: sticky;
-  top: 0; */
-}
-
-.quoted {
-  white-space: pre;
-  margin-left: 2rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  margin-right: 3rem;
-  width: 90%;
-  background-color: #eee;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.8rem;
 }
 
 .comment {

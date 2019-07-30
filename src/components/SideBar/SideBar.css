@@ -64,3 +64,9 @@
 .bm-overlay {
   background: rgba(0, 0, 0, 0.3);
 }
+
+.sidebar-item {
+  color: "#A9A6FF";
+  cursor: pointer;
+  box-shadow: "0 0";
+}
