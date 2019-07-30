@@ -1,6 +1,5 @@
 import React from "react";
 import Accordeon from "../../components/Accordeon/Accordeon";
-import AccordeonItem from "../../components/Accordeon/AccordeonItem";
 import CalendarPanel from "./CalendarPanel";
 import AccordeonItemWithPanel from "../../components/AccordeonItemWithPanel";
 import PanelItem from "../../components/PanelItem/PanelItem";
@@ -33,14 +32,6 @@ const Agenda = React.forwardRef((props, myRefs) => {
         </div>
         <div className="col-md-3 col-xs-12">
           <Accordeon>
-            {/* <AccordeonItem title="What for?">
-              <PanelItem
-                name="whatFor"
-                ref={props.myRefs.whatFor}
-                content={props.page.whatFor}
-                doSave={doSave("whatFor")}
-              />
-            </AccordeonItem> */}
             <AccordeonItemWithPanel
               name="whatFor"
               doSave={doSave("whatFor")}
@@ -53,14 +44,6 @@ const Agenda = React.forwardRef((props, myRefs) => {
               ref={props.myRefs.notes}
               content={props.page.notes}
             />
-            {/* <AccordeonItem title="Notes">
-              <PanelItem
-                name="notes"
-                ref={props.myRefs.notes}
-                content={props.page.notes}
-                doSave={doSave("notes")}
-              />
-            </AccordeonItem> */}
           </Accordeon>
         </div>
       </div>
