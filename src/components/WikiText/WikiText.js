@@ -166,8 +166,9 @@ export const treeToReact = tree => {
       </span>
     ),
     dia: content => {
+      let direction = content[0] === "\n" ? "TB" : "LR";
       return (
-        <Diagram name={randomKey++} key={randomKey++}>
+        <Diagram name={randomKey++} direction={direction} key={randomKey++}>
           {content}
         </Diagram>
       );

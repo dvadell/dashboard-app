@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import mermaid, { mermaidAPI } from "mermaid";
-import { splitInTwo, wikiParseToTree } from "../WikiText/utils";
+import { wikiParseToTree } from "../WikiText/utils";
 import "./Diagram.css";
 
 class Diagram extends Component {
@@ -40,6 +40,7 @@ class Diagram extends Component {
       arrow: content => " --> ",
       text: content => this.formatMermaidNode(content)
     };
+
     return tree.map(tag => {
       if (tagToReact[tag.type]) {
         return tagToReact[tag.type](tag.content);
@@ -60,10 +61,10 @@ class Diagram extends Component {
 
   formatMermaidNode = label => {
     if (!label.trim()) return "?";
-    const sanitized_label = label.trim().replace(/\[|\]|\(|\)\{\}/g, "");
+    const sanitized_label = label.trim().replace(/\[|\]|\(|\)|\{|\}| /g, "");
     // Mermaid can't handle spaces in node labels, so we have to turn
     // 'This label' to 'This_label[This label]'
-    return sanitized_label.replace(/ /g, "") + "[" + sanitized_label + "]";
+    return sanitized_label + '["' + label.replace('"', "") + '"]';
   };
 
   componentDidMount() {
@@ -78,7 +79,14 @@ class Diagram extends Component {
 
     // Take the children (A --> B --> C, etc) and turn it into
     // Mermaid's markup (graph TD \n A --> B\n B --> C)
-    let mermaidMarkup = "graph TD";
+    // See https://mermaidjs.github.io/#/flowchart
+    // TB - top bottom
+    // BT - bottom top
+    // RL - right left
+    // LR - left right
+    // TD - same as TB
+    const direction = this.props.direction || "TD";
+    let mermaidMarkup = "graph " + direction;
     parsedDiaMarkup.split("\n").forEach(line => {
       let nodes = line.split("-->");
       for (let i = 0; i < nodes.length - 1; i++) {
