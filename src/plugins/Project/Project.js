@@ -1,33 +1,42 @@
 import React from "react";
 import "./Project.css";
 import Accordeon from "../../components/Accordeon/Accordeon";
-import AccordeonItem from "../../components/Accordeon/AccordeonItem";
 import PanelItem from "../../components/PanelItem/PanelItem";
+import AccordeonItemWithPanel from "../../components/AccordeonItemWithPanel";
 
 const Project = props => {
-  const doSave = name => content => props.doSave();
+  const doSave = name => content => {
+    console.log("saving", { name, content });
+    props.doSave();
+  };
+  // const parseColText = (text) => {
+  //   let lines = text.split('\n')
+  //   lines.map(line => {
+
+  //   })
+  // }
+  // const inLeftCol = (page) => {
+  //   let leftCols = parseColText(page.leftCol)
+  //   if (leftCols.length > 0) return leftCols;
+  //   // return a default layout
+  //   return ['cons', 'pros']
+  // }
 
   return (
     <div id="content" className="container-fluid d-flex h-100 flex-column">
       <div className="row bg-light flex-fill d-flex justify-content-start">
         <div className="col-md-3 col-xs-12">
           <Accordeon>
-            <AccordeonItem title="What do I need?">
-              <PanelItem
-                name="whatDoINeed"
-                ref={props.myRefs.whatDoINeed}
-                content={props.page.whatDoINeed}
-                doSave={doSave("whatDoINeed")}
-              />
-            </AccordeonItem>
-            <AccordeonItem title="Next Steps">
-              <PanelItem
-                name="nextSteps"
-                ref={props.myRefs.nextSteps}
-                content={props.page.nextSteps}
-                doSave={doSave("nextSteps")}
-              />
-            </AccordeonItem>
+            {Object.keys(props.page)
+              .filter(accordeon => typeof props.page[accordeon] === "string")
+              .map(accordeon => (
+                <AccordeonItemWithPanel
+                  name={accordeon}
+                  doSave={doSave(accordeon)}
+                  ref={props.myRefs[accordeon]}
+                  content={props.page[accordeon]}
+                />
+              ))}
           </Accordeon>
         </div>
 
@@ -42,30 +51,14 @@ const Project = props => {
         </div>
         <div className="col-md-3 col-xs-12">
           <Accordeon>
-            <AccordeonItem title="What for?">
-              <PanelItem
-                name="whatFor"
-                ref={props.myRefs.whatFor}
-                content={props.page.whatFor}
-                doSave={doSave("whatFor")}
+            {["leftCol", "rightCol"].map(accordeon => (
+              <AccordeonItemWithPanel
+                name={accordeon}
+                doSave={doSave(accordeon)}
+                ref={props.myRefs[accordeon]}
+                content={props.page[accordeon]}
               />
-            </AccordeonItem>
-            <AccordeonItem title="Pros">
-              <PanelItem
-                name="pros"
-                ref={props.myRefs.pros}
-                content={props.page.pros}
-                doSave={doSave("pros")}
-              />
-            </AccordeonItem>
-            <AccordeonItem title="Cons">
-              <PanelItem
-                name="cons"
-                ref={props.myRefs.cons}
-                content={props.page.cons}
-                doSave={doSave("cons")}
-              />
-            </AccordeonItem>
+            ))}
           </Accordeon>
         </div>
       </div>

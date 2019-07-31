@@ -52,7 +52,6 @@ class App extends Component {
         newState[panelName] = this.myRefs[panelName].current.state.content;
       }
     });
-    console.log({ newState });
     this.props.savePage(newState);
     console.log("saving", newState);
 
@@ -73,9 +72,10 @@ class App extends Component {
 
   render() {
     if (this.props.page) {
-      Object.keys(this.props.page).forEach(
-        key => (this.myRefs[key] = createRef())
-      );
+      Object.keys(this.props.page).forEach(key => {
+        console.log("Making ref for", key);
+        this.myRefs[key] = createRef();
+      });
       if (this.props.viewHandler === "ag") {
         return (
           <Agenda

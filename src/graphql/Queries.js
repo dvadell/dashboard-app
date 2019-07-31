@@ -12,6 +12,8 @@ export const LOAD_PAGE = gql`
       whatFor
       nextSteps
       notes
+      leftCol
+      rightCol
       version
     }
   }
@@ -29,6 +31,8 @@ export const LOAD_RANDOM_PAGE = gql`
       whatFor
       nextSteps
       notes
+      leftCol
+      rightCol
       version
     }
   }
@@ -46,6 +50,8 @@ export const SEARCH_FOR_PAGES_CONTAINING = gql`
       whatFor
       nextSteps
       notes
+      leftCol
+      rightCol
       version
     }
   }

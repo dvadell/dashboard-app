@@ -23,16 +23,10 @@ class AccordeonItem extends Component {
 
   componentDidMount() {
     if (this.ref.current) {
-      console.log("cdm: current exists");
-      console.log("scrollHeight (parent)", this.ref.current.scrollHeight);
-
       let h = 40;
       Array.from(this.ref.current.childNodes).forEach(node => {
         h = h + node.offsetHeight;
-        console.log(node, h);
-        console.log("scrollHeight", node.scrollHeight);
       });
-      console.log("setting height to", h);
       this.setState({ height: h });
     }
   }

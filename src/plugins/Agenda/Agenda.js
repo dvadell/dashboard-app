@@ -32,18 +32,14 @@ const Agenda = React.forwardRef((props, myRefs) => {
         </div>
         <div className="col-md-3 col-xs-12">
           <Accordeon>
-            <AccordeonItemWithPanel
-              name="whatFor"
-              doSave={doSave("whatFor")}
-              ref={props.myRefs.whatFor}
-              content={props.page.whatFor}
-            />
-            <AccordeonItemWithPanel
-              name="notes"
-              doSave={doSave("notes")}
-              ref={props.myRefs.notes}
-              content={props.page.notes}
-            />
+            {["whatFor", "notes"].map(accordeon => (
+              <AccordeonItemWithPanel
+                name={accordeon}
+                doSave={doSave(accordeon)}
+                ref={props.myRefs[accordeon]}
+                content={props.page[accordeon]}
+              />
+            ))}
           </Accordeon>
         </div>
       </div>

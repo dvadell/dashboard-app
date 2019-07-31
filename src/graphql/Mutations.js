@@ -11,6 +11,8 @@ export const SAVE_PAGE = gql`
     $whatFor: String
     $nextSteps: String
     $notes: String
+    $leftCol: String
+    $rightCol: String
   ) {
     saveProject(
       title: $title
@@ -22,6 +24,8 @@ export const SAVE_PAGE = gql`
       whatFor: $whatFor
       nextSteps: $nextSteps
       notes: $notes
+      leftCol: $leftCol
+      rightCol: $rightCol
     ) {
       title
     }
