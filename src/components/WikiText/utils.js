@@ -87,8 +87,6 @@ export const wikiParseToTree = (wikiText, rules) => {
   // And put it in separate places
   tree[0] = { type: "text", done: true, content: beforeText };
 
-  console.log("wikiParseToTree", { matchingRule });
-
   // Rule 'text' is just a dummy rule.
   if (matchingRule !== "text") {
     // Get options for the rule

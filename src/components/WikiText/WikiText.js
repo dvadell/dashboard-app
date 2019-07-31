@@ -64,7 +64,6 @@ export const wikiRules = {
   dia: [
     "__dia__",
     content => {
-      console.log("d", content);
       return { done: true };
     },
     "__dia__"
@@ -167,7 +166,6 @@ export const treeToReact = tree => {
       </span>
     ),
     dia: content => {
-      console.log("dia", content);
       return (
         <Diagram name={randomKey++} key={randomKey++}>
           {content}
