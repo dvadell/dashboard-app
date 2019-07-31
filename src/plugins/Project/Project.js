@@ -3,6 +3,7 @@ import "./Project.css";
 import Accordeon from "../../components/Accordeon/Accordeon";
 import PanelItem from "../../components/PanelItem/PanelItem";
 import AccordeonItemWithPanel from "../../components/AccordeonItemWithPanel";
+import Diagram from "../../components/Diagram/Diagram";
 
 const Project = props => {
   const doSave = name => content => {
@@ -17,6 +18,7 @@ const Project = props => {
       .map(line => {
         if (line.slice(0, 3) === "~~ " && line.slice(-3) === " ~~")
           return line.slice(3, -3);
+        return false;
       })
       .filter(x => x);
   };
@@ -65,6 +67,9 @@ const Project = props => {
             doSave={doSave("description")}
             content={props.page.description}
           />
+          ABC
+          <Diagram name="hola" />
+          ABCFIN
         </div>
         <div className="col-md-3 col-xs-12">
           <Accordeon>

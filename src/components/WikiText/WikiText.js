@@ -1,5 +1,6 @@
 import React from "react";
 import LinkWithRedux from "../LinkWithRedux/LinkWithRedux";
+import Diagram from "../Diagram/Diagram";
 import { splitInTwo, wikiParseToTree } from "./utils";
 import "./WikiText.css";
 
@@ -31,7 +32,7 @@ const splitQuoteTagEnding = wikiText => {
     wikiRules - rules that turn wikiText to a tree
     each key of the object corresponds to an array.
     The first member is the start of the tag
-    The second is reserved for future use
+    The second is for options (like done: true|false)
     The third is the end of the tag.
     For example, internal links look like [[something]]
 */
@@ -59,7 +60,15 @@ export const wikiRules = {
     wikiText => splitInTwo(wikiText, "\n", true)
   ],
   arrow: ["-->", undefined, undefined],
-  boxed: ["|", undefined, "|"]
+  boxed: ["|", undefined, "|"],
+  dia: [
+    "__dia__",
+    content => {
+      console.log("d", content);
+      return { done: true };
+    },
+    "__dia__"
+  ]
 };
 
 // This will turn the tree to a number of react components
@@ -156,7 +165,15 @@ export const treeToReact = tree => {
       <span key={randomKey++} className="boxed-wiki">
         {treeToReact(content)}
       </span>
-    )
+    ),
+    dia: content => {
+      console.log("dia", content);
+      return (
+        <Diagram name={randomKey++} key={randomKey++}>
+          {content}
+        </Diagram>
+      );
+    }
   };
 
   return tree.map(tag => {

@@ -24,6 +24,11 @@ const translations = {
     es_es: "Buscar",
     en: "Search"
   },
+  "Games!": {
+    es_ar: "Juegos!",
+    es_es: "Juegos!",
+    en: "Games!"
+  },
   "View as...": {
     es_ar: "Ver como...",
     es_es: "Ver como...",

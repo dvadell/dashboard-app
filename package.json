@@ -6,6 +6,7 @@
     "apollo-boost": "^0.4.3",
     "caret-xy": "^2.0.3",
     "graphql": "^14.4.2",
+    "mermaid": "^8.2.3",
     "mousetrap": "^1.6.3",
     "react": "^16.8.6",
     "react-apollo": "^2.5.8",

@@ -124,6 +124,9 @@ class SideBar extends Component {
             <Localize>Search</Localize>
           </button>
           <hr />
+          {this.createItem(<Localize>Games!</Localize>, () =>
+            console.log("games")
+          )}
         </Menu>
       </div>
     );

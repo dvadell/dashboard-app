@@ -64,33 +64,58 @@ export const separateTag = (wikiText, rules) => {
 
   // We have just text
   if (matchingRule === "text") {
-    return { text: wikiText };
+    return { beforeText: wikiText, matchingRule: "text" };
   }
 
   // Let's cut the string up to the stopWord
-  let [text, tagPlusRest] = splitInTwo(wikiText, rules[matchingRule][0]);
+  let [beforeText, tagPlusRest] = splitInTwo(wikiText, rules[matchingRule][0]);
 
   // Cut the rest up to the closing stopWord
-  let [tag, rest] = splitInTwo(tagPlusRest, rules[matchingRule][2]);
+  let [tagContent, rest] = splitInTwo(tagPlusRest, rules[matchingRule][2]);
 
-  return { text, tag, matchingRule, rest };
+  return { beforeText, tagContent, matchingRule, rest };
 };
 
 export const wikiParseToTree = (wikiText, rules) => {
   let tree = [];
   //
-  let { text, tag, matchingRule, rest } = separateTag(wikiText, rules);
+  let { beforeText, tagContent, matchingRule, rest } = separateTag(
+    wikiText,
+    rules
+  );
 
   // And put it in separate places
-  tree[0] = { type: "text", done: true, content: text };
+  tree[0] = { type: "text", done: true, content: beforeText };
 
-  if (tag) {
-    tree[1] = {
-      type: matchingRule,
-      done: false,
-      content: wikiParseToTree(tag, rules)
-    };
+  console.log("wikiParseToTree", { matchingRule });
+
+  // Rule 'text' is just a dummy rule.
+  if (matchingRule !== "text") {
+    // Get options for the rule
+    let opts = {};
+    if (rules[matchingRule][1]) {
+      opts = rules[matchingRule][1](tagContent);
+    }
+
+    // Check if we should continue processing the tag
+    // (opts.done)
+    if (opts && tagContent) {
+      if (opts.done) {
+        tree[1] = {
+          type: matchingRule,
+          done: true,
+          content: tagContent
+        };
+      } else {
+        tree[1] = {
+          type: matchingRule,
+          done: false,
+          content: wikiParseToTree(tagContent, rules)
+        };
+      }
+    }
   }
+
   let moreTags = rest ? wikiParseToTree(rest, rules) : [];
 
   return tree.concat(moreTags);
