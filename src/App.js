@@ -71,23 +71,17 @@ class App extends Component {
   }
 
   render() {
-    if (this.props.page) {
-      Object.keys(this.props.page).forEach(key => {
-        console.log("Making ref for", key);
-        this.myRefs[key] = createRef();
-      });
-      if (this.props.viewHandler === "ag") {
-        return (
-          <Agenda
-            myRefs={this.myRefs}
-            doSave={this.saveEverything}
-            loadEverything={this.loadEverything}
-            onClickDay={this.onClickDay}
-            {...this.props}
-          />
-        );
-      }
-      return (
+    const renderView = {
+      ag: (
+        <Agenda
+          myRefs={this.myRefs}
+          doSave={this.saveEverything}
+          loadEverything={this.loadEverything}
+          onClickDay={this.onClickDay}
+          {...this.props}
+        />
+      ),
+      pr: (
         <Project
           myRefs={this.myRefs}
           doSave={this.saveEverything}
@@ -95,7 +89,23 @@ class App extends Component {
           onClickDay={this.onClickDay}
           {...this.props}
         />
-      );
+      ),
+      meta: (
+        <Project
+          myRefs={this.myRefs}
+          doSave={this.saveEverything}
+          loadEverything={this.loadEverything}
+          onClickDay={this.onClickDay}
+          {...this.props}
+        />
+      )
+    };
+    if (this.props.page) {
+      Object.keys(this.props.page).forEach(key => {
+        console.log("Making ref for", key);
+        this.myRefs[key] = createRef();
+      });
+      return renderView[this.props.viewHandler] || "ERROR :(";
     } else {
       return "";
     }
