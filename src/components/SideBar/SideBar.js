@@ -6,7 +6,7 @@ import Localizer from "../../components/Localizer/Localizer";
 import translations from "./SideBar.translations";
 import "./SideBar.css";
 import { setViewAction } from "../../actions";
-import LinkWithRedux from "../../components/LinkWithRedux/LinkWithRedux";
+import Games from "../Games/Games";
 import Search from "../Search/Search";
 
 const mapStateToProps = state => {
@@ -21,14 +21,13 @@ const mapDispatchToProps = dispatchEvent => {
   };
 };
 
-const today = new Date().toISOString().slice(0, 10);
-
 class SideBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       menuOpen: false,
-      modalIsOpen: false
+      modalIsOpen: false,
+      gamesModalIsOpen: false
     };
   }
 
@@ -45,32 +44,19 @@ class SideBar extends Component {
   closeModal = () => {
     this.setState({ modalIsOpen: false });
   };
-  openModal = () => {
+  openModal = modalName => {
+    const modalIsOpen =
+      modalName === "games" ? "gamesModalIsOpen" : "modalIsOpen";
     // Again, if I fire both this.setState, the modal looses focus. I have to
     // run one as a callback of the other.
     this.setState({ menuOpen: false }, () =>
-      this.setState({ modalIsOpen: true })
+      this.setState({ [modalIsOpen]: true })
     );
   };
 
   toggleMenu() {
     this.setState(state => ({ menuOpen: !state.menuOpen }));
   }
-
-  // createItem = (text, link, forcedViewHandler) => {
-  //   return (
-  //     <LinkWithRedux
-  //       onClick={() => {
-  //         this.closeMenu();
-  //         forcedViewHandler && this.props.setView(forcedViewHandler);
-  //       }}
-  //       className="menu-item"
-  //       to={link}
-  //     >
-  //       {text}
-  //     </LinkWithRedux>
-  //   );
-  // };
 
   createItem = (text, onClick) => {
     return (
@@ -97,6 +83,13 @@ class SideBar extends Component {
           contentLabel="Search"
         >
           <Search closeModal={this.closeModal} />
+        </Modal>
+        <Modal
+          isOpen={this.state.gamesModalIsOpen}
+          onRequestClose={this.closeModal}
+          contentLabel="Games"
+        >
+          <Games closeModal={this.closeModal} />
         </Modal>
         <Menu
           {...this.props}
@@ -125,7 +118,7 @@ class SideBar extends Component {
           </button>
           <hr />
           {this.createItem(<Localize>Games!</Localize>, () =>
-            console.log("games")
+            this.openModal("games")
           )}
         </Menu>
       </div>

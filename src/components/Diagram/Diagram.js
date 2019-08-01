@@ -70,6 +70,7 @@ class Diagram extends Component {
   componentDidMount() {
     // Parse the markup
     let parsedDiaMarkup = "";
+    if (!this.props.children) return "";
     this.props.children.split("\n").forEach(line => {
       let parsed = this.diaParser(line, this.diaRules);
       if (parsed) {
