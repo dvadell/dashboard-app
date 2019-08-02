@@ -41,9 +41,9 @@ class SideBar extends Component {
   closeMenu() {
     this.setState({ menuOpen: false });
   }
-  closeModal = () => {
-    this.setState({ modalIsOpen: false });
-  };
+
+  closeModal = () => this.setState({ modalIsOpen: false });
+
   openModal = modalName => {
     const modalIsOpen =
       modalName === "games" ? "gamesModalIsOpen" : "modalIsOpen";

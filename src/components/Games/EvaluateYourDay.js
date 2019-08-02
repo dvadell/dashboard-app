@@ -9,6 +9,7 @@ const EvaluateYourDay = props => {
         You can write about them later (or not).
       </p>
       <button>Ready?</button>
+      <button>Add a question</button>
     </div>
   );
 };

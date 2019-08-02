@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import SideBar from "../../components/SideBar/SideBar";
+import Modal from "react-modal";
+import Search from "../Search/Search";
+
 import { getPageAction, getRandomPageAction } from "../../actions";
 import { loadPage, savePage } from "../../fetchlib";
 import "./NavBar.css";
@@ -22,17 +25,17 @@ class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: ""
+      content: "",
+      searchModalIsOpen: false
     };
   }
 
-  goToRandom = () => {
-    this.props.getRandomPage("random");
-  };
+  closeSearchModal = () => this.setState({ searchModalIsOpen: false });
+  openSearchModal = () => this.setState({ searchModalIsOpen: true });
 
-  updateContent = e => {
-    this.setState({ content: e.target.value });
-  };
+  goToRandom = () => this.props.getRandomPage("random");
+
+  updateContent = e => this.setState({ content: e.target.value });
 
   appendLeadingZeroes = n => (n < 10 ? "0" + n : n);
 
@@ -75,6 +78,15 @@ class NavBar extends Component {
     return (
       <div className="navbarwithburger non-bootstrap-navbar">
         <SideBar pageWrapId={"page-wrap"} outerContainerId={"app"} />
+
+        <Modal
+          isOpen={this.state.searchModalIsOpen}
+          onRequestClose={this.closeSearchModal}
+          contentLabel="Search"
+        >
+          <Search closeModal={this.closeSearchModal} />
+        </Modal>
+
         <div id="page-wrap"></div>
 
         <div className="textarea-div">
@@ -87,7 +99,10 @@ class NavBar extends Component {
           ></textarea>
         </div>
 
-        <div>
+        <div className="navbar-icon-side">
+          <div onClick={this.openSearchModal} className="navbar-search-icon">
+            <span className=" fa fa-search"></span>
+          </div>
           <img
             src="/img/dado_rojo_chico.png"
             style={{ height: "3em" }}
