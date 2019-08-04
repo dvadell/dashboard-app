@@ -58,6 +58,13 @@ export const findFirstStopWord = (wikiText, rules) => {
   return firstPosition[0];
 };
 
+/**
+ * @function separateTag - Split text into whatever is before the tag, the tag itself,
+ *                         whatever text is after the tag, and the rule that matched
+ *                         E.g. a [b] c => ['a', 'b', 'link', 'c']
+ * @param {*} wikiText - The text to split
+ * @param {*} rules    - The list of tags and the rules to identify them
+ */
 export const separateTag = (wikiText, rules) => {
   // The next stopWord is at...
   let matchingRule = findFirstStopWord(wikiText, rules);
@@ -76,12 +83,44 @@ export const separateTag = (wikiText, rules) => {
   return { beforeText, tagContent, matchingRule, rest };
 };
 
-export const wikiParseToTree = (wikiText, rules) => {
+/**
+ * @function filterRules - filter the rules for the parser according to disabledRules
+ *                         and enabledRules
+ * @param {*} rules - All the rules
+ * @param {*} disabledRules - The rules that should not be
+ * @param {*} enabledRules  - The rules that should be
+ */
+const filterRules = (rules, disableRules, enableRules) => {
+  let filteredRulesList = Object.keys(rules);
+  if (disableRules) {
+    filteredRulesList = filteredRulesList.filter(
+      rule => disableRules.indexOf(rule) === -1
+    );
+  }
+  if (enableRules) {
+    filteredRulesList = filteredRulesList.filter(
+      rule => enableRules.indexOf(rule) > -1
+    );
+  }
+  // Now filteredRulesList has a list of rules. We should return the object itself.
+  let filteredRules = {};
+  filteredRulesList.forEach(rule => (filteredRules[rule] = rules[rule]));
+  return filteredRules;
+};
+
+export const wikiParseToTree = (wikiText, rules, opts = {}) => {
   let tree = [];
-  //
+
+  // opts.disableRules sets what rules should not be passed this time.
+  // opts.enableRules  sets what rules should be passed.
+  let filteredRules = rules;
+  if (opts.disableRules || opts.enableRules) {
+    filteredRules = filterRules(rules, opts.disableRules, opts.enableRules);
+  }
+
   let { beforeText, tagContent, matchingRule, rest } = separateTag(
     wikiText,
-    rules
+    filteredRules
   );
 
   // And put it in separate places
@@ -90,15 +129,14 @@ export const wikiParseToTree = (wikiText, rules) => {
   // Rule 'text' is just a dummy rule.
   if (matchingRule !== "text") {
     // Get options for the rule
-    let opts = {};
+    let tagOpts = {};
     if (rules[matchingRule][1]) {
-      opts = rules[matchingRule][1](tagContent);
+      tagOpts = rules[matchingRule][1](tagContent);
     }
 
     // Check if we should continue processing the tag
-    // (opts.done)
-    if (opts && tagContent) {
-      if (opts.done) {
+    if (tagOpts && tagContent) {
+      if (tagOpts.done) {
         tree[1] = {
           type: matchingRule,
           done: true,
@@ -108,7 +146,7 @@ export const wikiParseToTree = (wikiText, rules) => {
         tree[1] = {
           type: matchingRule,
           done: false,
-          content: wikiParseToTree(tagContent, rules)
+          content: wikiParseToTree(tagContent, rules, tagOpts)
         };
       }
     }

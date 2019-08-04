@@ -41,7 +41,13 @@ export const wikiRules = {
   externalLink: ["[http", undefined, "]"],
   bold: ["'''", undefined, "'''"],
   italics: ["''", undefined, "''"],
-  quoted: ["\n    ", undefined, splitQuoteTagEnding],
+  quoted: [
+    "\n    ",
+    content => {
+      return { disableRules: ["quoted"] };
+    },
+    splitQuoteTagEnding
+  ],
   taskUnchecked: ["[ ] ", undefined, "\n"],
   taskChecked: ["[x] ", undefined, "\n"],
   taskWaiting: ["[w] ", undefined, "\n"],
@@ -60,7 +66,6 @@ export const wikiRules = {
     wikiText => splitInTwo(wikiText, "\n", true)
   ],
   arrow: ["-->", undefined, undefined],
-  boxed: ["|", undefined, "|"],
   dia: [
     "__dia__",
     content => {
@@ -76,7 +81,7 @@ export const treeToReact = tree => {
     internalLink: content => {
       let [linkName, linkText] = splitInTwo(treeToReact(content).join(), "|");
       return (
-        <LinkWithRedux key={linkName} to={linkName}>
+        <LinkWithRedux data-test="internalLink" key={linkName} to={linkName}>
           {linkText || linkName}
         </LinkWithRedux>
       );
@@ -160,11 +165,6 @@ export const treeToReact = tree => {
       </span>
     ),
     arrow: content => " ⟶ ",
-    boxed: content => (
-      <span key={randomKey++} className="boxed-wiki">
-        {treeToReact(content)}
-      </span>
-    ),
     dia: content => {
       let direction = content[0] === "\n" ? "TB" : "LR";
       return (

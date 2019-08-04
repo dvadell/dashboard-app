@@ -1,13 +1,16 @@
 import { shallow } from "enzyme";
 import React from "react";
-import {
-  rules,
-  splitInTwo,
-  findFirstStopWord,
-  separateTag,
-  wikiParser
-} from "./WikiText";
+import configureStore from "redux-mock-store";
+import { wikiRules as rules, wikiParser } from "./WikiText";
+import { findFirstStopWord, separateTag, splitInTwo } from "./utils";
 import { findByDataTestAttr } from "../../testlib/testlib";
+const mockStore = configureStore();
+const initialState = {
+  PagesReducer: {
+    title: "dummy_for_test"
+  }
+};
+const store = mockStore(initialState);
 
 // it('expect to render WikiText component', () => {
 //     expect(shallow(<WikiText>dummy</WikiText>))
@@ -88,29 +91,50 @@ describe("find next stop word", () => {
 describe("separate tags from wikiText", () => {
   let wikiTextSimple = "no link [[a link]] no link again";
   it("expect to separate simple wikiText", () => {
-    let { text, tag, matchingRule, rest } = separateTag(wikiTextSimple, rules);
+    let { beforeText, tagContent, matchingRule, rest } = separateTag(
+      wikiTextSimple,
+      rules
+    );
     expect(matchingRule).toEqual("internalLink");
-    expect(text).toEqual("no link ");
-    expect(tag).toEqual("a link");
+    expect(beforeText).toEqual("no link ");
+    expect(tagContent).toEqual("a link");
     expect(rest).toEqual(" no link again");
   });
 
+  it("should separate the alternate name of an internalLink", () => {
+    const textLinkAltname =
+      "See [[article name|this article]] for more information";
+    let { beforeText, tagContent, matchingRule, rest } = separateTag(
+      textLinkAltname,
+      rules
+    );
+    expect(matchingRule).toEqual("internalLink");
+    expect(beforeText).toEqual("See ");
+    expect(tagContent).toEqual("article name|this article");
+    expect(rest).toEqual(" for more information");
+  });
+
   let wikiTextComplex = " lots of quotes '''[[a link]]''' no link again";
-  console.log("wikiTextComplex:", wikiTextComplex);
   it("expect to separate complex wikiText", () => {
-    let { text, tag, matchingRule, rest } = separateTag(wikiTextComplex, rules);
+    let { beforeText, tagContent, matchingRule, rest } = separateTag(
+      wikiTextComplex,
+      rules
+    );
     expect(matchingRule).toEqual("bold");
-    expect(text).toEqual(" lots of quotes ");
-    expect(tag).toEqual("[[a link]]");
+    expect(beforeText).toEqual(" lots of quotes ");
+    expect(tagContent).toEqual("[[a link]]");
     expect(rest).toEqual(" no link again");
   });
 
   let wikiTextOnly = "no link no no link again";
   it("expect to separate just text", () => {
-    let { text, tag, matchingRule, rest } = separateTag(wikiTextOnly, rules);
-    expect(matchingRule).toEqual(undefined);
-    expect(text).toEqual("no link no no link again");
-    expect(tag).toEqual(undefined);
+    let { beforeText, tagContent, matchingRule, rest } = separateTag(
+      wikiTextOnly,
+      rules
+    );
+    expect(matchingRule).toEqual("text");
+    expect(beforeText).toEqual("no link no no link again");
+    expect(tagContent).toEqual(undefined);
     expect(rest).toEqual(undefined);
   });
 });
@@ -129,6 +153,17 @@ describe("build the tree of tags", () => {
 
     expect(tree[2]).toEqual(" el artículo");
   });
+
+  // Don't know how to do this. internalLinks needs redux, but it's not a component.
+  // const textLinkAltname = "See [[article name|this article]] for more information";
+  // it("parse a link with an alternate name correctly", () => {
+  //   let reactComponentWithStore = <div store={store}>
+  //                {wikiParser(textLinkAltname, rules)}
+  //             </div>
+  //   const wrapper = shallow(reactComponentWithStore )
+  //   const componentFound = findByDataTestAttr(wrapper, 'internalLink')
+  //   expect(componentFound.html().toEqual('a'))
+  // });
 });
 
 //
@@ -161,13 +196,9 @@ Level0`;
     let wrapper = shallow(tree[1]);
     expect(findByDataTestAttr(wrapper, "bullet1").length).toBe(1);
 
-    console.log("tree2", tree[2]); // empty
-    console.log("tree3", tree[3]);
     wrapper = shallow(tree[3]);
     expect(findByDataTestAttr(wrapper, "bullet2").length).toBe(1);
 
-    console.log("tree4", tree[4]); // empty
-    console.log("tree5", tree[5]);
     wrapper = shallow(tree[5]);
     expect(findByDataTestAttr(wrapper, "bullet3").length).toBe(1);
 
@@ -182,7 +213,6 @@ and another`;
   it("from simple wikiText", () => {
     let tree = wikiParser(wikiTextSimple, rules);
     let expected = ["A line", <p />, "and another"];
-    console.log("tree", typeof tree[1]);
     expect(tree[0]).toEqual(expected[0]);
 
     // This is a React component
