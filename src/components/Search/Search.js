@@ -18,7 +18,7 @@ class Search extends Component {
     console.log("content", content);
     this.setState({ content });
 
-    if (content.length > 1) {
+    if (content.length > 2) {
       searchForPagesContaining(content).then(json =>
         this.setState({ results: json })
       );
@@ -45,6 +45,7 @@ class Search extends Component {
         </div>
         <Results
           results={this.state.results}
+          highlight={this.state.content}
           closeModal={this.props.closeModal}
         />
       </div>
