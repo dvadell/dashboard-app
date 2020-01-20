@@ -1,0 +1,49 @@
+version: "3.7"
+services: 
+    nginx:
+        container_name: nginx-dashboard
+        hostname: nginx
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile.dev
+        init: true
+        depends_on:
+            - frontend
+        ports:
+            - '7000:80'
+
+    backend:
+        container_name: backend-dashboard
+        hostname: backend
+        build: 
+            context: ./backend
+            dockerfile: Dockerfile.dev
+        # restart: always
+        #command: /usr/local/bin/runmongo.sh
+        #working_dir: /home/nya-mongo
+        init: true
+        volumes:
+          - ./backend/:/app/
+          - /app/node_modules/
+
+    frontend:
+        container_name: frontend-dashboard
+        hostname: frontend
+        build: 
+            context: ./frontend
+            dockerfile: Dockerfile.dev
+        init: true
+        volumes:
+          - type: bind
+            source: ./frontend/
+            target: /app/
+          - /app/node_modules/
+    mongo:
+        container_name: mongo-dashboard
+        image: mongo:3.6
+        hostname: mongo
+        volumes:
+          - type: bind
+            source: ./mongo/mongodb/
+            target: /data/db
+

@@ -1,0 +1,62 @@
+/* NavBar */
+.navbarwithburger {
+  height: 3rem;
+}
+
+.non-bootstrap-navbar {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  background-color: #333;
+  height: 3rem;
+}
+
+/* I'm not that sure if this needs to be here. It's needed by the sidebar. */
+#page-wrap {
+  flex-grow: 1;
+}
+
+.textarea-div {
+  flex: 1;
+  flex-grow: 4;
+  /* width: 70%; */
+  height: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-icon-side {
+  flex: 1;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.textarea-div > textarea {
+  width: 50%;
+  height: 2rem;
+  resize: none;
+  background-color: #333;
+  flex: 1;
+}
+
+.textarea-div > textarea:focus {
+  outline: none;
+  height: 6rem;
+  z-index: 1000;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  margin: 16%;
+  width: 66%;
+  margin-top: 0.5rem;
+  background-color: #f8f9fa;
+  transition: height 0.5s, background-color 0.5s;
+}
+
+.navbar-search-icon {
+  color: white;
+  font-size: 2rem;
+  margin: auto 0.4rem;
+}

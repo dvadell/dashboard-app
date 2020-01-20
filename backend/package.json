@@ -1,0 +1,25 @@
+{
+  "name": "projectQL",
+  "version": "1.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.7.0",
+    "apollo-server-express": "^2.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.0.0",
+    "graphql": "^14.4.2",
+    "mongoose": "^5.6.5",
+    "morgan": "^1.9.1",
+    "passport-facebook": "^3.0.0"
+  }
+}

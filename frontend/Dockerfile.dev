@@ -1,0 +1,17 @@
+FROM ubuntu:18.04
+ENV DEBIAN_FRONTEND noninteractive
+
+# Base
+RUN apt update && apt install -y vim-tiny iputils-ping sudo curl less git wget \
+    unzip software-properties-common strace iproute2 telnet net-tools screen
+
+# Node
+RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+RUN apt update && apt install -y nodejs
+
+WORKDIR '/app'
+COPY ./package.json .
+RUN npm install
+# COPY src src
+CMD ["npm", "run", "start"]
+

@@ -1,0 +1,1 @@
+This is a web app to store notes, remind me of things, and aid me at reflecting on myself (maybe). It's really in it's early stage. It just has a wiki that doesn't save anything yet.

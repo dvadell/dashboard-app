@@ -1,0 +1,21 @@
+FROM ubuntu:18.04
+ENV DEBIAN_FRONTEND noninteractive
+
+# Base
+RUN apt update && apt install -y vim-tiny iputils-ping sudo curl less git wget \
+    unzip software-properties-common strace iproute2 telnet net-tools screen
+
+# Node
+RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+RUN apt update && apt install -y nodejs
+
+RUN npm install -g nodemon
+
+RUN curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl && \
+    chmod a+rx /usr/local/bin/youtube-dl
+
+WORKDIR '/app'
+COPY ./package.json .
+RUN npm install
+# COPY src src
+CMD ["npm", "run", "start"]
